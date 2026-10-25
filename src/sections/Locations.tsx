@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Compass, MapPin, Search, Skull, Sparkles } from "lucide-react";
 import { locations, regions } from "../data/locations";
 import type { Location } from "../data/types";
-import { Badge, Chips, DangerDots, EmptyState, SectionHeader } from "../components/ui";
+import { Badge, Chips, DangerDots, EmptyState, SectionHeader, SectionSubhead } from "../components/ui";
 
 export function LocationsView({ focusId }: { focusId?: string }) {
   const [query, setQuery] = useState("");
@@ -74,9 +74,7 @@ export function LocationsView({ focusId }: { focusId?: string }) {
       )}
 
       <section className="mt-10">
-        <h2 className="mb-3 border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-          Порядок исследования
-        </h2>
+        <SectionSubhead title="Порядок исследования" className="mb-3" />
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["1–5 ур.", "Ноэр, канализация, кладбище, фермы"],

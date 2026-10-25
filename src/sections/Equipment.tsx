@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { AlertTriangle, Filter, Hammer, Search, Shield, Sparkles } from "lucide-react";
 import { equipment, equipmentSets } from "../data/equipment";
 import type { Equipment } from "../data/types";
-import { Badge, Chips, EmptyState, SearchField, SectionHeader, StatPill } from "../components/ui";
+import { Badge, Chips, EmptyState, SearchField, SectionHeader, SectionSubhead, StatPill } from "../components/ui";
 import { href } from "../lib/router";
 
 const kindLabels: Record<Equipment["kind"], string> = {
@@ -186,10 +186,7 @@ export function EquipmentView({ focusId }: { focusId?: string }) {
       )}
 
       <section className="mt-10">
-        <div className="mb-4 flex items-end justify-between gap-3 border-b border-line/70 pb-2">
-          <h2 className="font-display text-2xl text-parchment">Комплекты</h2>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-muted/45">{equipmentSets.length} сетов</span>
-        </div>
+        <SectionSubhead title="Комплекты" aside={`${equipmentSets.length} сетов`} />
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {equipmentSets.map((set) => (
             <div key={set.name} className="card p-4">

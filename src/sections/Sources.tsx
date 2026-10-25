@@ -1,5 +1,5 @@
 import { AlertTriangle, BookOpen, ExternalLink, Github, Info, ShieldCheck } from "lucide-react";
-import { Badge, Callout, SectionHeader } from "../components/ui";
+import { Badge, Callout, SectionHeader, SectionSubhead } from "../components/ui";
 import { SITE } from "../lib/meta";
 
 const sources = [
@@ -127,9 +127,7 @@ export function SourcesView() {
       </div>
 
       <section className="mt-8 space-y-3">
-        <h2 className="border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-          Расхождения и оговорки
-        </h2>
+        <SectionSubhead title="Расхождения и оговорки" />
         <div className="grid gap-2 md:grid-cols-2">
           {[
             [

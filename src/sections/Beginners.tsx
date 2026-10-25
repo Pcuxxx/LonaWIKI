@@ -14,7 +14,7 @@ import {
   Utensils,
 } from "lucide-react";
 import { href } from "../lib/router";
-import { Badge, Callout, SectionHeader } from "../components/ui";
+import { Badge, Callout, SectionHeader, SectionSubhead } from "../components/ui";
 
 const checklist = [
   "Выйти из стартовой комнаты и взять вилы из сундука",
@@ -185,9 +185,7 @@ export function Beginners() {
       </div>
 
       <section className="mt-10">
-        <h2 className="mb-4 border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-          Еда, отдых и первые деньги
-        </h2>
+        <SectionSubhead title="Еда, отдых и первые деньги" />
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
           <div className="card overflow-hidden">
             <div className="overflow-x-auto">
@@ -244,9 +242,7 @@ export function Beginners() {
       </section>
 
       <section className="mt-10">
-        <h2 className="mb-4 border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-          Куда идти дальше
-        </h2>
+        <SectionSubhead title="Куда идти дальше" />
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {[
             {
@@ -286,9 +282,7 @@ export function Beginners() {
 
       <section className="mt-10 grid gap-4 md:grid-cols-2">
         <div>
-          <h2 className="mb-4 border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-            Частые ошибки
-          </h2>
+          <SectionSubhead title="Частые ошибки" />
           <div className="space-y-1.5">
             {mistakes.map((m) => (
               <div key={m.title} className="border border-line bg-white/[0.015] p-3">
@@ -304,9 +298,7 @@ export function Beginners() {
           </div>
         </div>
         <div>
-          <h2 className="mb-4 border-b border-line/70 pb-2 font-display text-2xl text-parchment">
-            Опасные места на старте
-          </h2>
+          <SectionSubhead title="Опасные места на старте" />
           <div className="space-y-1.5">
             {[
               ["Пиковый лес", "Кабаны и Король спирали. Обходите до 5–6 уровня."],
