@@ -1,4 +1,4 @@
-import { AlertTriangle, BookOpen, ExternalLink, Github, Info, ShieldCheck } from "lucide-react";
+import { AlertTriangle, BookOpen, Download, ExternalLink, Github, HeartHandshake, Info, ShieldCheck } from "lucide-react";
 import { Badge, Callout, SectionHeader, SectionSubhead } from "../components/ui";
 import { SITE } from "../lib/meta";
 
@@ -11,13 +11,13 @@ const sources = [
   },
   {
     name: "Pimez Compendium",
-    url: "https://docs.google.com/spreadsheets/d/1Z7uR8s0xY3d8vQv0n6m0m0m0m0m0m0m0m0m0m0m0m",
+    url: "https://docs.google.com/spreadsheets/d/1QZY5F3jOEPXI_Wsaz3NfGvQXgpZS3MNWwupucf9K_WU/edit",
     role: "Таблицы статов",
     note: "HP/STA/ATK/DEF врагов и компаньонов, характеристики снаряжения. Использован для бестиария и таблиц; числовые значения могут меняться между патчами.",
   },
   {
     name: "LonaRPG Fandom (RU)",
-    url: "https://lonarpg.fandom.com/ru",
+    url: "https://lonarpg-ru.fandom.com/ru",
     role: "Русская терминология",
     note: "Помог с устоявшимися русскими названиями. Многие страницы неполные или устаревшие, поэтому использован как вспомогательный источник.",
   },
@@ -50,6 +50,107 @@ export function SourcesView() {
           </>
         }
       />
+
+      <section className="mb-8">
+        <SectionSubhead title="Где взять игру" aside="без пиратских зеркал" />
+        <div className="grid gap-3 lg:grid-cols-[1.35fr_1fr]">
+          <div className="card p-5">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <Badge tone="gold">Официально</Badge>
+              <Badge tone="neutral">Windows / Linux</Badge>
+              <Badge tone="moss">Demo бесплатно</Badge>
+            </div>
+            <h3 className="font-display text-xl text-parchment">Страница Eccma417</h3>
+            <p className="mt-2 text-[13px] leading-relaxed text-muted">
+              Начинать стоит с бесплатного демо: оно полностью переведено на английский и показывает,
+              нужен ли вам вообще этот жестокий симулятор выживания. Полная версия стоит $29, но на
+              itch.io она больше не продаётся: актуальные реквизиты автор публикует на своей странице —
+              мы переписали их справа.
+            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <a
+                href="https://eccma417.itch.io/lonarpg-demo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between border border-moss/40 bg-moss/10 px-3 py-2.5 text-sm text-parchment transition hover:border-moss/70"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <Download className="h-4 w-4 text-moss" /> Скачать демо
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-muted/60">Free</span>
+              </a>
+              <a
+                href="https://eccma417.itch.io/lonarpg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between border border-gold/40 bg-gold/10 px-3 py-2.5 text-sm text-parchment transition hover:border-gold/70"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4 text-gold" /> Официальная страница
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-muted/60">itch.io</span>
+              </a>
+            </div>
+            <p className="mt-3 text-[11px] leading-relaxed text-muted/60">
+              Там же лежат три канала сборок: Latest {SITE.version}, PrevStable {SITE.previous} и
+              Unstable DEV {SITE.devDate}. Мы описываем Latest, но помечаем места, где DEV уже ушёл
+              вперёд.
+            </p>
+          </div>
+
+          <div className="card p-5">
+            <h3 className="flex items-center gap-2 font-display text-lg text-parchment">
+              <HeartHandshake className="h-4 w-4 text-[#d98a8a]" /> Покупка напрямую
+            </h3>
+            <p className="mt-2 text-[12px] leading-relaxed text-muted">
+              Автор вынес продажи за пределы itch.io и принимает оплату напрямую. Ссылки и реквизиты —
+              с его официальной страницы:
+            </p>
+            <ul className="mt-3 space-y-2 text-[12px] leading-relaxed">
+              <li>
+                <span className="text-muted/55">USDT (TRC20), $29: </span>
+                <code className="break-all text-[11px] text-gold/90">TK1ToRWM1iKkPwLEgWRPGn2L6wPtyn4LHz</code>
+                <div className="text-[11px] text-muted/55">
+                  После перевода отправьте TXN HASH на{" "}
+                  <a href="mailto:eccm.a4@gmail.com" className="text-ember/80 hover:text-gold">
+                    eccm.a4@gmail.com
+                  </a>
+                  .
+                </div>
+              </li>
+              <li>
+                <span className="text-muted/55">Карточка на Clusters: </span>
+                <a
+                  href="https://clusters.tw/profile/41217B6F-E6E1-4A29-8E2A-CA73773AB263/works"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ember/80 hover:text-gold"
+                >
+                  870 tier
+                </a>
+                <span className="text-muted/55"> — альтернативный способ поддержать автора.</span>
+              </li>
+            </ul>
+            <p className="mt-3 border-t border-line/60 pt-2 text-[11px] leading-relaxed text-muted/60">
+              Это не наша касса: мы просто переписали контакты с официальной страницы. Если что-то
+              поменялось — доверяйте странице Eccma417, а не этому сайту.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-3 border border-line bg-white/[0.015] p-4">
+          <div className="flex items-start gap-2 text-[12px] leading-relaxed text-muted">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-gold/70" />
+            <p>
+              <span className="text-parchment/90">Про пиратство, честно.</span> Торренты с LonaRPG
+              существуют. Вместе с ними существуют битые сборки, моды-трояны, переводы из 2014 года и
+              версия, где половина диалогов — «?????». Мы не советуем ни торренты, ни «проверенные»
+              сборки из комментариев. Автор годами пилит игру, а $29 — это примерно неделя кофе. Если
+              денег нет — начните с демо, оно бесплатное и официальное.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
         <section className="card p-5">

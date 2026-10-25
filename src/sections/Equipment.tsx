@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, Filter, Hammer, Search, Shield, Sparkles } from "lucide-react";
 import { equipment, equipmentSets } from "../data/equipment";
+import { originalFor } from "../data/original";
 import type { Equipment } from "../data/types";
 import { Badge, Chips, EmptyState, SearchField, SectionHeader, SectionSubhead, StatPill } from "../components/ui";
 import { href } from "../lib/router";
@@ -123,14 +124,16 @@ export function EquipmentView({ focusId }: { focusId?: string }) {
         <EmptyState text="Ничего не найдено. Сбросьте фильтры или измените запрос." />
       ) : (
         <div className="grid gap-2 md:grid-cols-2">
-          {filtered.map((item) => (
-            <article
-              key={item.id}
-              id={`eq-${item.id}`}
-              className={`card scroll-mt-24 p-4 transition ${
-                focusId === item.id ? "border-ember/60 ring-1 ring-ember/25" : ""
-              } ${item.removed ? "border-dashed opacity-80" : ""}`}
-            >
+          {filtered.map((item) => {
+            const info = originalFor(item.name);
+            return (
+              <article
+                key={item.id}
+                id={`eq-${item.id}`}
+                className={`card scroll-mt-24 p-4 transition ${
+                  focusId === item.id ? "border-ember/60 ring-1 ring-ember/25" : ""
+                } ${item.removed ? "border-dashed opacity-80" : ""}`}
+              >
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="mb-1 flex flex-wrap items-center gap-1.5">
@@ -160,6 +163,12 @@ export function EquipmentView({ focusId }: { focusId?: string }) {
 
               <p className="mt-2 text-[13px] leading-relaxed text-muted">{item.note}</p>
 
+              {info?.desc && (
+                <p className="mt-2 border-l-2 border-gold/25 pl-2.5 text-[12px] italic leading-relaxed text-muted/80">
+                  «{info.desc}»
+                </p>
+              )}
+
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-line/60 pt-2 text-[11px] text-muted/70">
                 <span className="inline-flex items-center gap-1">
                   <Search className="h-3 w-3 text-ember/50" /> {item.where}
@@ -181,7 +190,8 @@ export function EquipmentView({ focusId }: { focusId?: string }) {
                 </div>
               )}
             </article>
-          ))}
+            );
+          })}
         </div>
       )}
 

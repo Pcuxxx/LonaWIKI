@@ -29,7 +29,7 @@ export const achievements: Achievement[] = [
   { id: 21, name: "DEATH APOCALYPSE", ru: "АПОКАЛИПСИС СМЕРТИ", condition: "Наблюдать за таинственным незнакомцем, собирающим души, во время артиллерийского события «Найди врага» (линия Лизы).", category: "story", missable: true },
   { id: 22, name: "This is four me arse'ole!", ru: "Это по мне, черт побери!", condition: "Защитить лагерь Южных ворот с помощью пушки «Владыка M405».", category: "story" },
   { id: 23, name: "Like a Phoenix, arise!", ru: "Восстань, как Феникс!", condition: "Совершить Rebirth после смерти.", category: "story" },
-  { id: 24, name: "This is for Sybaris...", ru: "Это за Сибарис...", condition: "Столкнуть трёх богов в The Oriental Commerce: спровоцировать Гадалку, Джастиса и Морскую Ведьму.", category: "secret", missable: true },
+  { id: 24, name: "This is for Sybaris...", ru: "Это за Сибарис...", condition: "Уничтожить сердце улья аберраций (Abomination Hive Heart). Подсказка: можно стравить трёх «богов» в The Oriental Commerce.", category: "secret", missable: true },
   { id: 25, name: "Think Lona, THINK!", ru: "Думай, Лона, ДУМАЙ!", condition: "Спасти беженцев у разрушенного каравана без помощи компаньонов (квест «Возвращение праха»).", category: "challenge", missable: true },
   { id: 26, name: "Goodbye, cruel world.", ru: "Прощай, жестокий мир.", condition: "Покинуть остров Ноэр.", category: "story" },
   { id: 27, name: "Hoarder", ru: "Скопидомка", condition: "Достичь общего капитала 20 000 TP в банке.", category: "collection" },

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AlertTriangle, Compass, Eye, Image, Search, Sparkles, Trash2 } from "lucide-react";
 import { cutContent, easterEggs, paintings, secrets } from "../data/secrets";
-import type { CutContent } from "../data/secrets";
+import type { CutContent, SecretCategory } from "../data/secrets";
 import { Badge, EmptyState, SectionHeader, Spoiler } from "../components/ui";
 
 type Tab = "secrets" | "paintings" | "eggs" | "cut";
@@ -11,6 +11,24 @@ const statusLabels: Record<CutContent["status"], string> = {
   unused: "Не используется",
   future: "Будущее",
   debug: "Отладка",
+};
+
+const categoryLabels: Record<SecretCategory, string> = {
+  location: "Локация",
+  quest: "Квест",
+  easter: "Пасхалка",
+  adult: "18+",
+  ending: "Концовка",
+  cut: "Вырезанное",
+};
+
+const categoryTones: Record<SecretCategory, "violet" | "moss" | "gold" | "blood" | "frost" | "neutral"> = {
+  location: "frost",
+  quest: "moss",
+  easter: "gold",
+  adult: "blood",
+  ending: "violet",
+  cut: "neutral",
 };
 
 export function SecretsView({ focusId }: { focusId?: string }) {
@@ -119,7 +137,7 @@ export function SecretsView({ focusId }: { focusId?: string }) {
                 className={`card scroll-mt-24 p-4 ${focusId === s.id ? "border-ember/60 ring-1 ring-ember/20" : ""}`}
               >
                 <div className="mb-1 flex flex-wrap items-center gap-1.5">
-                  <Badge tone="violet">{s.category}</Badge>
+                  <Badge tone={categoryTones[s.category]}>{categoryLabels[s.category]}</Badge>
                   {s.missable && <Badge tone="blood">Пропускаемое</Badge>}
                   {s.adult && <Badge tone="blood">18+</Badge>}
                 </div>
