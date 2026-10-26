@@ -118,7 +118,7 @@ export const locations: Location[] = [
     name: "Noer Cemetery",
     ru: "Кладбище Ноэра",
     region: "Ноэр",
-    coords: "X23 Y95",
+    coords: "X26 Y95",
     danger: 3,
     summary:
       "Старое кладбище с катакомбами, где обитает Коко-на и нежить. Одно из первых мест, где можно столкнуться со скелетами и найти вход в подземелья.",
@@ -188,7 +188,7 @@ export const locations: Location[] = [
     name: "Noer Prison",
     ru: "Тюрьма Ноэра",
     region: "Ноэр",
-    coords: "X26 Y95",
+    coords: "X23 Y95",
     danger: 3,
     summary:
       "Городская тюрьма, куда попадают за низкую мораль или арест. Отсюда можно сбежать или оказаться в рабстве.",
