@@ -9,6 +9,7 @@ import {
   ListChecks,
   Map,
   MapPin,
+  MessagesSquare,
   Puzzle,
   ScrollText,
   Shield,
@@ -107,6 +108,7 @@ export const navGroups: NavGroup[] = [
     label: "Архив",
     items: [
       { id: "achievements", label: "Достижения", desc: "Все достижения", icon: Trophy, count: counts.achievements },
+      { id: "community", label: "Сообщество", desc: "Правки и обсуждения", icon: MessagesSquare },
       { id: "sources", label: "Источники", desc: "Версии и ссылки", icon: BookOpen },
     ],
   },

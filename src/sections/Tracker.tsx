@@ -20,6 +20,7 @@ import { endings } from "../data/endings";
 import { href } from "../lib/router";
 import type { SectionId } from "../lib/router";
 import { Badge, Chips, SectionHeader, SearchField } from "../components/ui";
+import { trackEvent } from "../lib/analytics";
 import {
   TRACK_LABELS,
   TRACK_TOTALS,
@@ -192,6 +193,7 @@ export function TrackerView() {
   const percent = filtered.length ? Math.round((doneCount / filtered.length) * 100) : 0;
 
   const doExport = () => {
+    trackEvent("tracker-export");
     const blob = new Blob([exportProgress()], { type: "application/json;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -206,8 +208,10 @@ export function TrackerView() {
   const doImport = async (file: File) => {
     const text = await file.text();
     const result = importProgress(text);
-    if (result.ok) setImportMessage({ tone: "ok", text: `Импортировано отметок: ${result.count}. Прогресс обновлён.` });
-    else setImportMessage({ tone: "error", text: result.error ?? "Не удалось прочитать файл." });
+    if (result.ok) {
+      trackEvent("tracker-import", result.count);
+      setImportMessage({ tone: "ok", text: `Импортировано отметок: ${result.count}. Прогресс обновлён.` });
+    } else setImportMessage({ tone: "error", text: result.error ?? "Не удалось прочитать файл." });
     if (fileRef.current) fileRef.current.value = "";
   };
 

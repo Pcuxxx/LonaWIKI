@@ -4,6 +4,7 @@ import { consumables, questItems } from "../data/items";
 import { characters } from "../data/characters";
 import { enemies } from "../data/bestiary";
 import { locations } from "../data/locations";
+import { debugPlaceholders, debugZones, debugZoneKindLabels } from "../data/debug-zones";
 import { achievements } from "../data/achievements";
 import { traits } from "../data/traits";
 import { builds } from "../data/builds";
@@ -109,6 +110,23 @@ export const searchIndex: SearchEntry[] = [
       l.loot,
       l.tips,
       ...l.points,
+    ]),
+  ),
+  ...debugZones.map((z) =>
+    make(`loc-${z.id}`, "locations", z.id, debugZoneKindLabels[z.kind], z.ru, z.editorName, [
+      z.summary,
+      z.access,
+      z.mapIds,
+      ...z.details,
+      z.evidence ?? "",
+      "служебная карта редактор отладка",
+      z.kind === "test" ? "тест" : "",
+    ]),
+  ),
+  ...debugPlaceholders.map((p) =>
+    make(`loc-${p.id}`, "locations", p.id, "Пометка редактора", p.ru, p.label, [
+      p.text,
+      "пометка редактора карта",
     ]),
   ),
   ...achievements.map((a) =>

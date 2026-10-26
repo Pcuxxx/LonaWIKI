@@ -171,6 +171,14 @@ export const PAGES: PageMeta[] = [
       "Как устанавливать моды LonaRPG через встроенный UMM, где лежат ModScripts и GameMods.ini, и что умеет вики-мод.",
     noindex: false,
   },
+  {
+    id: "community",
+    path: "community",
+    label: "Сообщество",
+    title: "Сообщество LonaRPG — обсуждения, правки и данные архива",
+    description:
+      "Как предложить правку в русский архив LonaRPG, обсудить игру, скачать открытые JSON-выгрузки и помочь с проверкой данных.",
+  },
 ];
 
 export const PAGE_BY_ID = Object.fromEntries(PAGES.map((p) => [p.id, p])) as Record<SectionId, PageMeta>;

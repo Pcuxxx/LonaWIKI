@@ -14,6 +14,7 @@ import { enemies } from "../src/data/bestiary";
 import { endings } from "../src/data/endings";
 import { achievements } from "../src/data/achievements";
 import { characters } from "../src/data/characters";
+import { debugPlaceholders, debugZones } from "../src/data/debug-zones";
 
 export { PAGES, SITE_BASE, SITE_ORIGIN };
 
@@ -30,4 +31,6 @@ export const datasets = {
   endings,
   achievements,
   characters,
+  debugZones,
+  debugPlaceholders,
 };

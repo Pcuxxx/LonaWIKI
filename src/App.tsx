@@ -45,19 +45,37 @@ const VIEWS: Record<SectionId, SectionComponent> = {
   tracker: lazy(() => import("./sections/Tracker").then((m) => ({ default: m.TrackerView }))),
   tools: lazy(() => import("./sections/Tools").then((m) => ({ default: m.ToolsView }))),
   mods: lazy(() => import("./sections/Mods").then((m) => ({ default: m.ModsView }))),
+  community: lazy(() => import("./sections/Community").then((m) => ({ default: m.CommunityView }))),
 };
 
 function scrollToFocus(id?: string) {
-  if (!id) return;
-  window.setTimeout(() => {
+  if (!id) return () => {};
+  let cancelled = false;
+  let timer = 0;
+  let attempts = 0;
+  const behavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? "auto"
+    : "smooth";
+
+  const tryScroll = () => {
+    if (cancelled) return;
     for (const prefix of FOCUS_PREFIXES) {
       const el = document.getElementById(`${prefix}${id}`);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        el.scrollIntoView({ behavior, block: "start" });
         return;
       }
     }
-  }, 90);
+    // Ленивый раздел монтируется после первого кадра, а данные карты —
+    // после подгрузки; поэтому пробуем несколько раз, пока не найдём якорь.
+    if (++attempts < 20) timer = window.setTimeout(tryScroll, 100);
+  };
+
+  timer = window.setTimeout(tryScroll, 80);
+  return () => {
+    cancelled = true;
+    window.clearTimeout(timer);
+  };
 }
 
 function SectionFallback() {
@@ -91,9 +109,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    scrollToFocus(route.id);
+    const cancel = scrollToFocus(route.id);
     if (!route.id) window.scrollTo({ top: 0, behavior: "auto" });
     trackPage(`${window.location.pathname}${window.location.hash}`, document.title);
+    return cancel;
   }, [route.section, route.id]);
 
   useEffect(() => {

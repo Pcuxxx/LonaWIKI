@@ -19,7 +19,8 @@ export type SectionId =
   | "map"
   | "tracker"
   | "tools"
-  | "mods";
+  | "mods"
+  | "community";
 
 export interface Route {
   section: SectionId;
@@ -46,6 +47,7 @@ export const knownSections: SectionId[] = [
   "tracker",
   "tools",
   "mods",
+  "community",
 ];
 
 const BASE = import.meta.env.BASE_URL || "/";

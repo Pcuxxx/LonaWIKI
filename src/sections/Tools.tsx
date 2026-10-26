@@ -1,21 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
+  Backpack,
   Check,
   Coins,
   Copy,
   FlaskConical,
   Minus,
   Plus,
+  RotateCcw,
   ShoppingBasket,
   Sparkles,
   Swords,
   Trash2,
+  Weight,
 } from "lucide-react";
 import { recipes, type Recipe } from "../data/original";
 import { equipment } from "../data/equipment";
 import { consumables } from "../data/items";
 import { Badge, Chips, SectionHeader, SectionSubhead, SearchField } from "../components/ui";
+import { trackEvent } from "../lib/analytics";
 
 /* ------------------------------------------------------------------ */
 /*  Крафт                                                              */
@@ -169,12 +173,13 @@ function loadShopping(): ShoppingItem[] {
 /*  Компонент                                                          */
 /* ------------------------------------------------------------------ */
 
-type ToolTab = "craft" | "compare" | "shopping";
+type ToolTab = "craft" | "compare" | "shopping" | "loadout";
 
 const TABS: { id: ToolTab; label: string; icon: typeof FlaskConical }[] = [
   { id: "craft", label: "Котёл", icon: FlaskConical },
   { id: "compare", label: "Снаряжение", icon: Swords },
   { id: "shopping", label: "Список покупок", icon: ShoppingBasket },
+  { id: "loadout", label: "Комплект", icon: Backpack },
 ];
 
 export function ToolsView() {
@@ -185,7 +190,7 @@ export function ToolsView() {
       <SectionHeader
         eyebrow="Практика"
         title="Инструменты"
-        description="Три вещи, которые чаще всего нужны в игре: понять, что можно сварить из имеющихся ингредиентов, сравнить две единицы снаряжения по статам и посчитать закупку в TP."
+        description="Четыре вещи, которые чаще всего нужны в игре: понять, что можно сварить из имеющихся ингредиентов, сравнить две единицы снаряжения по статам, посчитать закупку в TP и собрать комплект с общим весом."
         meta={
           <>
             <Badge tone="gold">{recipes.length} рецептов</Badge>
@@ -201,7 +206,10 @@ export function ToolsView() {
           return (
             <button
               key={entry.id}
-              onClick={() => setTab(entry.id)}
+              onClick={() => {
+                setTab(entry.id);
+                trackEvent("tools-tab", entry.id);
+              }}
               className={`relative flex shrink-0 items-center gap-2 px-4 py-2.5 text-[12px] transition ${
                 tab === entry.id ? "text-parchment" : "text-muted/55 hover:text-parchment/85"
               }`}
@@ -217,6 +225,7 @@ export function ToolsView() {
       {tab === "craft" && <CraftTool />}
       {tab === "compare" && <CompareTool />}
       {tab === "shopping" && <ShoppingTool />}
+      {tab === "loadout" && <LoadoutTool />}
     </div>
   );
 }
@@ -568,6 +577,199 @@ function CompareTool() {
 /* ------------------------------------------------------------------ */
 /*  Список покупок                                                     */
 /* ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ */
+/*  Комплект                                                           */
+/* ------------------------------------------------------------------ */
+
+const LOADOUT_SLOTS = [
+  "Two Handed",
+  "Main Hand",
+  "Right Hand",
+  "Left Hand",
+  "Off-hand",
+  "Head",
+  "Hair",
+  "Top",
+  "TopExtra",
+  "Mid",
+  "MidExtra",
+  "Bot",
+  "Acc",
+] as const;
+
+const HAND_SLOTS = new Set<string>(["Main Hand", "Right Hand", "Left Hand", "Off-hand"]);
+
+function LoadoutTool() {
+  const [picked, setPicked] = useState<Record<string, string>>({});
+
+  const poolBySlot = useMemo(() => {
+    const map = new Map<string, typeof equipment>();
+    for (const slot of LOADOUT_SLOTS) {
+      const pool = equipment
+        .filter((item) => item.slot === slot && !item.removed)
+        .sort((a, b) => (a.price ?? 0) - (b.price ?? 0) || a.ru.localeCompare(b.ru, "ru"));
+      if (pool.length > 0) map.set(slot, pool);
+    }
+    return map;
+  }, []);
+
+  const choose = (slot: string, id: string) => {
+    setPicked((prev) => {
+      const next = { ...prev };
+      if (!id) {
+        delete next[slot];
+        return next;
+      }
+      if (slot === "Two Handed") for (const hand of HAND_SLOTS) delete next[hand];
+      if (HAND_SLOTS.has(slot)) delete next["Two Handed"];
+      next[slot] = id;
+      return next;
+    });
+  };
+
+  const chosen = useMemo(
+    () =>
+      LOADOUT_SLOTS.flatMap((slot) => {
+        const item = equipment.find((entry) => entry.id === picked[slot]);
+        return item ? [{ slot, item }] : [];
+      }),
+    [picked],
+  );
+
+  const totalPrice = chosen.reduce((sum, entry) => sum + (entry.item.price ?? 0), 0);
+  const totalWeight = chosen.reduce((sum, entry) => sum + (entry.item.weight ?? 0), 0);
+  const requirements = useMemo(
+    () => [...new Set(chosen.map((entry) => entry.item.requirements).filter(Boolean))] as string[],
+    [chosen],
+  );
+  const twoHanded = Boolean(picked["Two Handed"]);
+
+  return (
+    <div>
+      <SectionSubhead title="Сборка комплекта" aside="Цена, вес и требования" />
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="border border-line/80 bg-white/[0.012] p-3.5">
+          <p className="mb-3 text-[11px] leading-relaxed text-muted/60">
+            Выберите по одному предмету на слот. Двуручное оружие несовместимо с предметами в руках —
+            при выборе оно снимает их автоматически. Цены и вес взяты из таблицы снаряжения.
+          </p>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            {LOADOUT_SLOTS.map((slot) => {
+              const pool = poolBySlot.get(slot);
+              if (!pool) return null;
+              const item = equipment.find((entry) => entry.id === picked[slot]);
+              const disabled = twoHanded && HAND_SLOTS.has(slot) && slot !== "Two Handed";
+              return (
+                <label key={slot} className="flex flex-col gap-1">
+                  <span className="flex items-baseline justify-between gap-2 text-[8.5px] uppercase tracking-[0.16em] text-muted/45">
+                    {SLOT_LABELS[slot] ?? slot}
+                    {item && (
+                      <span className="font-mono text-[9px] normal-case tracking-normal text-muted/35">
+                        {item.price ? `${item.price.toLocaleString("ru")} TP` : "—"} · {item.weight ?? "—"} кг
+                      </span>
+                    )}
+                  </span>
+                  <select
+                    value={picked[slot] ?? ""}
+                    onChange={(event) => choose(slot, event.target.value)}
+                    disabled={disabled}
+                    className="w-full border border-line bg-void px-2.5 py-2 text-[11.5px] text-parchment outline-none transition focus:border-ember/50 disabled:cursor-not-allowed disabled:opacity-35"
+                  >
+                    <option value="">— не выбрано —</option>
+                    {pool.map((entry) => (
+                      <option key={entry.id} value={entry.id}>
+                        {entry.ru} — {entry.name}
+                      </option>
+                    ))}
+                  </select>
+                  {disabled && (
+                    <span className="text-[9px] text-muted/30">Недоступно с двуручным оружием.</span>
+                  )}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        <aside className="h-fit border border-line/80 bg-white/[0.012] p-3.5 lg:sticky lg:top-24">
+          <div className="flex items-center justify-between">
+            <span className="text-[9px] uppercase tracking-[0.2em] text-ember/80">Итого</span>
+            <button
+              onClick={() => setPicked({})}
+              disabled={chosen.length === 0}
+              className="flex items-center gap-1 text-[9px] uppercase tracking-[0.14em] text-muted/45 transition hover:text-parchment disabled:opacity-30"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Сброс
+            </button>
+          </div>
+
+          <div className="mt-3 space-y-2">
+            <div className="flex items-baseline justify-between gap-2 border-b border-line/50 pb-2">
+              <span className="flex items-center gap-1.5 text-[10.5px] text-muted/55">
+                <Coins className="h-3.5 w-3.5 text-gold/55" />
+                Стоимость
+              </span>
+              <span className="font-display text-[19px] text-gold">{totalPrice.toLocaleString("ru")} TP</span>
+            </div>
+            <div className="flex items-baseline justify-between gap-2 border-b border-line/50 pb-2">
+              <span className="flex items-center gap-1.5 text-[10.5px] text-muted/55">
+                <Weight className="h-3.5 w-3.5 text-frost/55" />
+                Вес
+              </span>
+              <span className="font-mono text-[14px] text-parchment/85">{totalWeight.toFixed(1)} кг</span>
+            </div>
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="flex items-center gap-1.5 text-[10.5px] text-muted/55">
+                <Backpack className="h-3.5 w-3.5 text-moss/55" />
+                Предметов
+              </span>
+              <span className="font-mono text-[14px] text-parchment/85">{chosen.length}</span>
+            </div>
+          </div>
+
+          <div className="mt-3 border-t border-line/60 pt-3">
+            <div className="text-[8.5px] uppercase tracking-[0.18em] text-muted/40">Требования</div>
+            {requirements.length === 0 ? (
+              <p className="mt-1 text-[10.5px] text-muted/45">Нет — комплект можно собрать сразу.</p>
+            ) : (
+              <div className="mt-1.5 flex flex-wrap gap-1">
+                {requirements.map((req) => (
+                  <span key={req} className="border border-gold/25 bg-gold/[0.06] px-1.5 py-0.5 text-[9.5px] text-gold/80">
+                    {req}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {chosen.length > 0 && (
+            <div className="mt-3 border-t border-line/60 pt-2">
+              <div className="mb-1 text-[8.5px] uppercase tracking-[0.18em] text-muted/40">Состав</div>
+              <ul className="space-y-0.5 text-[10px] text-muted/55">
+                {chosen.map(({ slot, item }) => (
+                  <li key={slot} className="flex justify-between gap-2">
+                    <span className="truncate">{item.ru}</span>
+                    <span className="shrink-0 font-mono text-[9px] text-muted/30">{SLOT_LABELS[slot] ?? slot}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="mt-3 flex items-start gap-2 border-t border-line/60 pt-2 text-[9.5px] leading-relaxed text-muted/40">
+            <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0 text-ember/50" />
+            Вес указан по таблице предметов и может отличаться от фактического с учётом содержимого
+            рюкзака и лошади.
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
 
 function ShoppingTool() {
   const [list, setList] = useState<ShoppingItem[]>(loadShopping);

@@ -22,6 +22,7 @@ import { ISLAND_PATHS, LAND_PATH, MAP_H, MAP_W, project } from "../data/map-geom
 import { Badge, Chips, DangerDots, SectionHeader, SearchField } from "../components/ui";
 import { href } from "../lib/router";
 import { toggle, useProgress } from "../lib/progress";
+import { trackEvent } from "../lib/analytics";
 
 /* ------------------------------------------------------------------ */
 /*  Данные                                                             */
@@ -793,6 +794,10 @@ export function MapView({ focusId }: { focusId?: string }) {
 
   const selected = selectedId ? POINT_BY_ID.get(selectedId) ?? null : null;
 
+  useEffect(() => {
+    trackEvent("map-open");
+  }, []);
+
   const shellRef = useRef<HTMLDivElement>(null);
   const mapBoxRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -1011,6 +1016,7 @@ export function MapView({ focusId }: { focusId?: string }) {
     (id: string) => {
       hideHover();
       setSelectedId(id);
+      trackEvent("map-location", id);
     },
     [hideHover],
   );
@@ -1323,12 +1329,12 @@ export function MapView({ focusId }: { focusId?: string }) {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Chips options={regionOptions} value={region} onChange={setRegion} label="Регион" />
+          <Chips options={regionOptions} value={region} onChange={(value) => { setRegion(value); trackEvent("map-region", value); }} label="Регион" />
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Chips options={DANGER_OPTIONS} value={danger} onChange={setDanger} label="Опасность" />
+          <Chips options={DANGER_OPTIONS} value={danger} onChange={(value) => { setDanger(value); trackEvent("map-danger", value); }} label="Опасность" />
           <span className="mx-1 hidden h-4 w-px bg-line/70 sm:block" />
-          <Chips options={SCOPE_OPTIONS} value={scope} onChange={setScope} label="Статус" />
+          <Chips options={SCOPE_OPTIONS} value={scope} onChange={(value) => { setScope(value); trackEvent("map-scope", value); }} label="Статус" />
           <button
             onClick={() => setShowRoutes((v) => !v)}
             className={`inline-flex items-center gap-1.5 rounded-[2px] border px-2.5 py-1.5 text-[11px] transition ${

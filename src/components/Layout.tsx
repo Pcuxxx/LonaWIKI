@@ -14,6 +14,7 @@ import { allSections, navGroups, SITE, sectionLabel } from "../lib/meta";
 import { href, navigate, type Route, type SectionId } from "../lib/router";
 import type { SearchEntry } from "../lib/search";
 import { Badge, Sigil } from "./ui";
+import { trackEvent } from "../lib/analytics";
 
 function SidebarLink({
   id,
@@ -370,10 +371,17 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
     if (open) {
       setQuery("");
       setActive(0);
+      trackEvent("search-open");
       const t = window.setTimeout(() => inputRef.current?.focus(), 40);
       return () => window.clearTimeout(t);
     }
   }, [open]);
+
+  useEffect(() => {
+    if (!open || !query.trim() || !searchModule || results.length > 0) return;
+    const t = window.setTimeout(() => trackEvent("search-empty"), 650);
+    return () => window.clearTimeout(t);
+  }, [open, query, searchModule, results.length]);
 
   useEffect(() => {
     setActive(0);
@@ -393,6 +401,7 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
         setActive((v) => Math.max(v - 1, 0));
       } else if (event.key === "Enter" && results[active]) {
         event.preventDefault();
+        trackEvent("search-select", results[active].section);
         navigate(results[active].section, results[active].targetId);
         onClose();
       }
@@ -450,6 +459,7 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
                     key={entry.key}
                     onMouseEnter={() => setActive(i)}
                     onClick={() => {
+                      trackEvent("search-select", entry.section);
                       navigate(entry.section, entry.targetId);
                       onClose();
                     }}

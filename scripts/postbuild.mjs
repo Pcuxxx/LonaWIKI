@@ -222,6 +222,13 @@ const files = {
     count: datasets.enemies.length,
     enemies: datasets.enemies,
   },
+  "debug.json": {
+    generated: new Date().toISOString(),
+    count: datasets.debugZones.length,
+    note: "Служебные карты не входят в обычное прохождение и не имеют координат на мировой карте.",
+    zones: datasets.debugZones,
+    placeholders: datasets.debugPlaceholders,
+  },
   "progress.json": {
     generated: new Date().toISOString(),
     counts: {

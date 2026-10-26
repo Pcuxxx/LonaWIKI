@@ -1,0 +1,395 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  AlertTriangle,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  Code2,
+  Download,
+  ExternalLink,
+  FileJson,
+  Github,
+  MessageSquare,
+  MessagesSquare,
+  PencilLine,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from "lucide-react";
+import { Badge, SectionHeader, SectionSubhead } from "../components/ui";
+import { absoluteUrl, PAGE_BY_ID, PAGES } from "../lib/pages";
+import { SITE } from "../lib/meta";
+import type { SectionId } from "../lib/router";
+import { trackEvent } from "../lib/analytics";
+
+const GITHUB = "https://github.com/Pcuxxx/LonaWIKI";
+const DISCUSSIONS = `${GITHUB}/discussions`;
+const ISSUES = `${GITHUB}/issues/new`;
+
+const DATA_EXPORTS = [
+  { file: "locations.json", label: "Локации", desc: "45 локаций, регионы и координаты" },
+  { file: "quests.json", label: "Квесты", desc: "53 квеста со шагами и наградами" },
+  { file: "equipment.json", label: "Снаряжение", desc: "Оружие, броня, наборы и статы" },
+  { file: "items.json", label: "Предметы", desc: "Расходники и квестовые предметы" },
+  { file: "craft.json", label: "Крафт", desc: "Рецепты Dark Cauldron" },
+  { file: "bestiary.json", label: "Бестиарий", desc: "Враги, боссы и слабости" },
+  { file: "debug.json", label: "Служебные карты", desc: "Лаборатории и пометки редактора" },
+  { file: "progress.json", label: "Счётчики", desc: "Размеры разделов и список страниц" },
+  { file: "build.json", label: "Сборка", desc: "Версия данных и дата генерации" },
+];
+
+const HELP_CARDS = [
+  {
+    icon: PencilLine,
+    title: "Исправить факт",
+    text: "Координаты, цена, стат или название. Приложите версию игры и скриншот — так правку быстрее проверить.",
+  },
+  {
+    icon: BookOpen,
+    title: "Добавить перевод",
+    text: "Оригинальные названия и реплики полезны рядом с русскими. Не переводите имена собственные наугад.",
+  },
+  {
+    icon: Sparkles,
+    title: "Найти секрет",
+    text: "Пасхалки, вырезанные предметы и неочевидные взаимодействия. Помечайте, если это отладка, а не обычная игра.",
+  },
+  {
+    icon: Code2,
+    title: "Помочь с кодом",
+    text: "Карта, поиск, доступность и производительность. Исходники открыты, данные лежат отдельно от компонентов.",
+  },
+];
+
+export function CommunityView() {
+  const [page, setPage] = useState<SectionId>("home");
+  const [message, setMessage] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const pageMeta = PAGE_BY_ID[page] ?? PAGE_BY_ID.home;
+  const pageUrl = absoluteUrl(page);
+
+  const issueUrl = useMemo(() => {
+    const title = `[Правка] ${pageMeta.label}`;
+    const body = [
+      `Страница: ${pageUrl}`,
+      "",
+      "Что нужно исправить:",
+      message.trim() || "—",
+      "",
+      "---",
+      `Версия игры: ${SITE.version}`,
+      "Отправлено из раздела «Сообщество».",
+    ].join("\n");
+    return `${ISSUES}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+  }, [message, pageMeta.label, pageUrl]);
+
+  const sendEdit = () => {
+    trackEvent("community-edit", page);
+    window.open(issueUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(pageUrl);
+      setCopied(true);
+      trackEvent("community-copy", page);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <div>
+      <SectionHeader
+        eyebrow="Архив"
+        title="Сообщество"
+        description="Архив живёт на проверках и правках. Здесь можно предложить исправление, обсудить игру, забрать данные в JSON и помочь с тем, что ещё не описано."
+        meta={
+          <>
+            <Badge tone="gold">Открытые данные</Badge>
+            <Badge tone="neutral">GitHub Discussions</Badge>
+            <Badge tone="moss">18+</Badge>
+          </>
+        }
+      />
+
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <section className="card p-4">
+          <SectionSubhead title="Предложить правку" aside="Откроется GitHub Issues" className="mb-3" />
+          <p className="mb-3 text-[12px] leading-relaxed text-muted/70">
+            Опишите, что не сходится с игрой. Форма подставит страницу и ссылку, а вы сможете добавить
+            скриншот и версию сборки уже в GitHub.
+          </p>
+
+          <div className="grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_auto]">
+            <label className="flex flex-col gap-1">
+              <span className="text-[8.5px] uppercase tracking-[0.18em] text-muted/45">Страница</span>
+              <select
+                value={page}
+                onChange={(event) => setPage(event.target.value as SectionId)}
+                className="w-full border border-line bg-void px-3 py-2 text-[12px] text-parchment outline-none focus:border-ember/50"
+              >
+                {PAGES.filter((entry) => entry.id !== "community").map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              onClick={copyLink}
+              className="mt-auto flex items-center justify-center gap-1.5 border border-line px-3 py-2 text-[11px] text-muted/70 transition hover:border-gold/40 hover:text-parchment"
+            >
+              {copied ? <Check className="h-3.5 w-3.5 text-moss" /> : <ExternalLink className="h-3.5 w-3.5" />}
+              {copied ? "Ссылка скопирована" : "Скопировать ссылку"}
+            </button>
+          </div>
+
+          <label className="mt-3 flex flex-col gap-1">
+            <span className="text-[8.5px] uppercase tracking-[0.18em] text-muted/45">Что исправить</span>
+            <textarea
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              rows={4}
+              placeholder="Например: у «Кольца Ноэра» неверная цена входа; на карте метка стоит на один квартал севернее…"
+              className="w-full resize-y border border-line bg-void px-3 py-2 text-[12px] leading-relaxed text-parchment placeholder:text-muted/35 outline-none focus:border-ember/50"
+            />
+          </label>
+
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+            <span className="text-[10px] text-muted/40">
+              Нужен аккаунт GitHub. Анонимные правки не принимаются.
+            </span>
+            <button
+              onClick={sendEdit}
+              disabled={!message.trim()}
+              className="flex items-center gap-1.5 border border-gold/40 bg-gold/[0.08] px-3.5 py-2 text-[11.5px] text-gold transition hover:bg-gold/[0.14] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Send className="h-3.5 w-3.5" />
+              Открыть форму правки
+            </button>
+          </div>
+        </section>
+
+        <section className="card p-4">
+          <SectionSubhead title="Обсуждения" aside="GitHub" className="mb-3" />
+          <div className="space-y-2">
+            <a
+              href={DISCUSSIONS}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackEvent("community-discussions")}
+              className="flex items-start gap-3 border border-line/70 bg-void/35 p-3 transition hover:border-gold/35 hover:bg-white/[0.02]"
+            >
+              <MessagesSquare className="mt-0.5 h-4 w-4 shrink-0 text-gold/70" />
+              <span className="min-w-0">
+                <span className="block text-[12.5px] text-parchment">Форум архива</span>
+                <span className="mt-0.5 block text-[10.5px] leading-relaxed text-muted/55">
+                  Вопросы по прохождению, находки, обсуждение спорных данных и предложения по разделам.
+                </span>
+              </span>
+              <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 text-muted/35" />
+            </a>
+            <a
+              href={ISSUES}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackEvent("community-issues")}
+              className="flex items-start gap-3 border border-line/70 bg-void/35 p-3 transition hover:border-gold/35 hover:bg-white/[0.02]"
+            >
+              <Github className="mt-0.5 h-4 w-4 shrink-0 text-gold/70" />
+              <span className="min-w-0">
+                <span className="block text-[12.5px] text-parchment">Ошибки и задачи</span>
+                <span className="mt-0.5 block text-[10.5px] leading-relaxed text-muted/55">
+                  Конкретные баги сайта, сломанные ссылки и фактические ошибки в данных.
+                </span>
+              </span>
+              <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 text-muted/35" />
+            </a>
+            <a
+              href={`${GITHUB}/blob/main/CONTRIBUTING.md`}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackEvent("community-contributing")}
+              className="flex items-start gap-3 border border-line/70 bg-void/35 p-3 transition hover:border-gold/35 hover:bg-white/[0.02]"
+            >
+              <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-gold/70" />
+              <span className="min-w-0">
+                <span className="block text-[12.5px] text-parchment">Как устроен архив</span>
+                <span className="mt-0.5 block text-[10.5px] leading-relaxed text-muted/55">
+                  Правила данных, структура исходников и минимальная проверка перед pull request.
+                </span>
+              </span>
+              <ArrowUpRight className="ml-auto h-3.5 w-3.5 shrink-0 text-muted/35" />
+            </a>
+          </div>
+
+          <div className="mt-3 border-l-2 border-gold/30 pl-3 text-[10px] leading-relaxed text-muted/50">
+            Спойлеры разрешены только в профильных разделах. Не публикуйте пиратские сборки и
+            персональные данные; возрастной рейтинг архива — 18+.
+          </div>
+        </section>
+      </div>
+
+      <section className="mt-8">
+        <SectionSubhead title="Чем можно помочь" aside="Без обязательств" className="mb-3" />
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {HELP_CARDS.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.title} className="card p-3.5">
+                <Icon className="h-4 w-4 text-gold/65" />
+                <h3 className="mt-2 font-display text-[15px] text-parchment">{card.title}</h3>
+                <p className="mt-1 text-[11px] leading-relaxed text-muted/60">{card.text}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mt-8 grid gap-3 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="card p-4">
+          <SectionSubhead title="Открытые данные" aside="JSON" className="mb-3" />
+          <p className="mb-3 text-[11.5px] leading-relaxed text-muted/65">
+            Данные архива можно забрать без парсинга страниц: те же объекты, что использует сайт.
+            Ссылки стабильны и обновляются при каждой сборке.
+          </p>
+          <div className="grid gap-1.5 sm:grid-cols-2">
+            {DATA_EXPORTS.map((entry) => (
+              <a
+                key={entry.file}
+                href={`${import.meta.env.BASE_URL}data/${entry.file}`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => trackEvent("community-export", entry.file)}
+                className="group flex items-center gap-2 border border-line/60 bg-void/30 px-2.5 py-2 transition hover:border-gold/30 hover:bg-white/[0.02]"
+              >
+                <FileJson className="h-3.5 w-3.5 shrink-0 text-ember/60" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[11px] text-parchment/85">{entry.label}</span>
+                  <span className="block truncate text-[9px] text-muted/40">{entry.desc}</span>
+                </span>
+                <Download className="h-3 w-3 shrink-0 text-muted/30 transition group-hover:text-gold/70" />
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="card p-4">
+          <SectionSubhead title="Комментарии" aside="Giscus" className="mb-3" />
+          <GiscusComments />
+        </div>
+      </section>
+
+      <section className="mt-8 border border-line/70 bg-white/[0.012] p-4">
+        <div className="flex items-start gap-3">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-moss/70" />
+          <div>
+            <h3 className="font-display text-[16px] text-parchment">Проверка важнее скорости</h3>
+            <p className="mt-1 max-w-3xl text-[11.5px] leading-relaxed text-muted/60">
+              Мы не выдаём служебные карты и отладочные команды за секреты. Если данные расходятся,
+              приоритет у файлов игры и наблюдаемого поведения в текущей сборке. Спорные места
+              помечаются прямо в тексте, а не прячутся.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Giscus                                                             */
+/* ------------------------------------------------------------------ */
+
+function GiscusComments() {
+  const ref = useRef<HTMLDivElement>(null);
+  const repo = import.meta.env.VITE_GISCUS_REPO;
+  const repoId = import.meta.env.VITE_GISCUS_REPO_ID;
+  const category = import.meta.env.VITE_GISCUS_CATEGORY;
+  const categoryId = import.meta.env.VITE_GISCUS_CATEGORY_ID;
+  const ready = Boolean(repo && repoId && categoryId);
+
+  useEffect(() => {
+    if (!ready || !ref.current) return;
+    const host = ref.current;
+    host.innerHTML = "";
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.dataset.repo = repo;
+    script.dataset.repoId = repoId;
+    if (category) script.dataset.category = category;
+    script.dataset.categoryId = categoryId;
+    script.dataset.mapping = "pathname";
+    script.dataset.strict = "0";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "top";
+    script.dataset.theme = "dark_dimmed";
+    script.dataset.lang = "ru";
+    host.appendChild(script);
+    return () => {
+      host.innerHTML = "";
+    };
+  }, [ready, repo, repoId, category, categoryId]);
+
+  if (!ready) {
+    return (
+      <div className="border border-dashed border-line/70 bg-void/25 p-4">
+        <div className="flex items-center gap-2 text-[12px] text-parchment/85">
+          <MessageSquare className="h-4 w-4 text-gold/60" />
+          Комментарии ещё не подключены
+        </div>
+        <p className="mt-2 text-[11px] leading-relaxed text-muted/60">
+          Для Giscus нужны публичный репозиторий, включённые Discussions и два идентификатора:
+          репозитория и категории. Пока их нет, обсуждайте архив в GitHub Discussions — ссылка выше.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <a
+            href={DISCUSSIONS}
+            target="_blank"
+            rel="noreferrer noopener"
+            onClick={() => trackEvent("community-discussions-fallback")}
+            className="flex items-center gap-1.5 border border-gold/35 px-3 py-1.5 text-[10.5px] text-gold transition hover:bg-gold/[0.08]"
+          >
+            <Users className="h-3.5 w-3.5" />
+            Открыть обсуждения
+          </a>
+          <a
+            href="https://giscus.app/ru"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex items-center gap-1.5 border border-line px-3 py-1.5 text-[10.5px] text-muted/65 transition hover:border-gold/30 hover:text-parchment"
+          >
+            <Code2 className="h-3.5 w-3.5" />
+            Как подключить Giscus
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div ref={ref} className="min-h-[120px]" />
+      <noscript>
+        <div className="border border-line/70 p-3 text-[11px] text-muted/60">
+          Для комментариев нужен JavaScript. Обсуждение также доступно в{" "}
+          <a className="text-gold underline" href={DISCUSSIONS}>
+            GitHub Discussions
+          </a>
+          .
+        </div>
+      </noscript>
+      <div className="mt-2 flex items-center gap-1.5 text-[9px] text-muted/35">
+        <AlertTriangle className="h-3 w-3" />
+        Комментарии — внешний сервис Giscus на GitHub. Правила те же, что в обсуждениях.
+      </div>
+    </div>
+  );
+}

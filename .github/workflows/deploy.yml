@@ -45,6 +45,11 @@ jobs:
           test -f dist/sitemap.xml
           test -f dist/map/index.html
           test -f dist/sw.js
+          test -f dist/data/debug.json
+          test -f dist/data/progress.json
+
+      - name: Validate data and pages
+        run: npm run validate
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
