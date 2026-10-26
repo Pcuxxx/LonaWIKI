@@ -54,6 +54,8 @@ const EVENT_LABELS: Record<string, string> = {
   "community-export": "Сообщество: JSON-выгрузка",
   "comments-refresh": "Комментарии: обновление",
   "comments-open": "Комментарии: переход в GitHub",
+  "comments-publish": "Комментарии: публикация",
+  "comments-replies": "Комментарии: чтение ответов",
   "stats-export": "Статистика: экспорт",
   "stats-clear": "Статистика: очистка",
   "stats-toggle": "Статистика: переключатель",

@@ -15,11 +15,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Badge, SectionHeader, SectionSubhead } from "../components/ui";
-import { PageComments } from "../components/GitHubComments";
+import { PageComments } from "../components/Comments";
 import { absoluteUrl, PAGE_BY_ID, PAGES } from "../lib/pages";
-import { SITE } from "../lib/meta";
 import type { SectionId } from "../lib/router";
 import { trackEvent } from "../lib/analytics";
+import { openGitHubPopup } from "../lib/popup";
 
 const GITHUB = "https://github.com/Pcuxxx/LonaWIKI";
 const DISCUSSIONS = `${GITHUB}/discussions`;
@@ -64,28 +64,27 @@ export function CommunityView() {
   const [page, setPage] = useState<SectionId>("home");
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [editState, setEditState] = useState<"idle" | "open" | "blocked">("idle");
 
   const pageMeta = PAGE_BY_ID[page] ?? PAGE_BY_ID.home;
   const pageUrl = absoluteUrl(page);
 
   const issueUrl = useMemo(() => {
-    const title = `[Правка] ${pageMeta.label}`;
-    const body = [
-      `Страница: ${pageUrl}`,
-      "",
-      "Что нужно исправить:",
-      message.trim() || "—",
-      "",
-      "---",
-      `Версия игры: ${SITE.version}`,
-      "Отправлено из раздела «Сообщество».",
-    ].join("\n");
+    const firstLine = message
+      .split(/\r?\n/)
+      .find((line) => line.trim().length > 0)
+      ?.trim()
+      .slice(0, 70);
+    const title = `Правка: ${pageMeta.label}${firstLine ? ` — ${firstLine}` : ""}`;
+    // Только авторский текст и скрытый маркер страницы: без шапки и подписи.
+    const body = `${message.trim()}\n\n<!-- lonawiki:edit ${page} -->`;
     return `${ISSUES}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-  }, [message, pageMeta.label, pageUrl]);
+  }, [message, page, pageMeta.label]);
 
   const sendEdit = () => {
     trackEvent("community-edit", page);
-    window.open(issueUrl, "_blank", "noopener,noreferrer");
+    const popup = openGitHubPopup(issueUrl, "lonawiki-edit");
+    setEditState(popup ? "open" : "blocked");
   };
 
   const copyLink = async () => {
@@ -114,12 +113,12 @@ export function CommunityView() {
         }
       />
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+      <div className="grid gap-3 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <section className="card p-4">
-          <SectionSubhead title="Предложить правку" aside="Откроется GitHub Issues" className="mb-3" />
+          <SectionSubhead title="Предложить правку" aside="Через GitHub" className="mb-3" />
           <p className="mb-3 text-[12px] leading-relaxed text-muted/70">
-            Опишите, что не сходится с игрой. Форма подставит страницу и ссылку, а вы сможете добавить
-            скриншот и версию сборки уже в GitHub.
+            Опишите, что не сходится с игрой. Откроется компактное окно GitHub с уже готовым
+            текстом — останется проверить и отправить. Скриншот и версию сборки можно добавить там же.
           </p>
 
           <div className="grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_auto]">
@@ -159,7 +158,7 @@ export function CommunityView() {
 
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <span className="text-[10px] text-muted/40">
-              Нужен аккаунт GitHub. Анонимные правки не принимаются.
+              Нужен аккаунт GitHub. В публикацию попадёт только ваш текст.
             </span>
             <button
               onClick={sendEdit}
@@ -167,9 +166,28 @@ export function CommunityView() {
               className="flex items-center gap-1.5 border border-gold/40 bg-gold/[0.08] px-3.5 py-2 text-[11.5px] text-gold transition hover:bg-gold/[0.14] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Send className="h-3.5 w-3.5" />
-              Открыть форму правки
+              Отправить правку
             </button>
           </div>
+
+          {editState === "open" && (
+            <div className="mt-2 border border-gold/25 bg-gold/[0.04] px-2.5 py-2 text-[9.5px] leading-relaxed text-muted/60">
+              Окно GitHub открыто. Нажмите там «Submit new issue» — текст уже подставлен.
+            </div>
+          )}
+          {editState === "blocked" && (
+            <div className="mt-2 flex flex-wrap items-center gap-2 border border-gold/25 bg-gold/[0.04] px-2.5 py-2 text-[9.5px] leading-relaxed text-muted/60">
+              <span>Браузер заблокировал окно.</span>
+              <a
+                href={issueUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex items-center gap-1 text-gold/80 hover:text-gold"
+              >
+                Открыть форму <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          )}
         </section>
 
         <section className="card p-4">
@@ -248,7 +266,7 @@ export function CommunityView() {
         </div>
       </section>
 
-      <section className="mt-8 grid gap-3 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <section className="mt-8 grid gap-3 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <div className="card p-4">
           <SectionSubhead title="Открытые данные" aside="JSON" className="mb-3" />
           <p className="mb-3 text-[11.5px] leading-relaxed text-muted/65">
@@ -277,12 +295,8 @@ export function CommunityView() {
         </div>
 
         <div className="card p-4">
-          <SectionSubhead title="Комментарии" aside="GitHub Issues" className="mb-3" />
-          <PageComments
-            pageId="community"
-            pageTitle="Сообщество"
-            pageUrl={absoluteUrl("community")}
-          />
+          <SectionSubhead title="Комментарии" aside="Публично · 18+" className="mb-3" />
+          <PageComments pageId="community" pageTitle="Сообщество" />
         </div>
       </section>
 
