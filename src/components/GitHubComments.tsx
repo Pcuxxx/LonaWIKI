@@ -140,9 +140,11 @@ export function PageComments({
 
       try {
         const response = await fetch(
-          `${API}/issues?state=all&per_page=100&sort=created&direction=desc`,
+          // t= обходит кэш CDN GitHub: свежая ветка появляется сразу после публикации.
+          `${API}/issues?state=all&per_page=100&sort=created&direction=desc&t=${Date.now()}`,
           {
             signal: abort.signal,
+            cache: "no-store",
             headers: { Accept: "application/vnd.github+json" },
           },
         );
