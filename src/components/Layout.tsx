@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { allSections, navGroups, SITE, sectionLabel } from "../lib/meta";
 import { href, navigate, type Route, type SectionId } from "../lib/router";
-import { searchAll, searchIndex, type SearchEntry } from "../lib/search";
+import type { SearchEntry } from "../lib/search";
 import { Badge, Sigil } from "./ui";
 
 function SidebarLink({
@@ -275,21 +275,96 @@ export function Layout({
   );
 }
 
+type SearchModule = {
+  searchAll: (query: string, limit?: number) => SearchEntry[];
+  searchIndex: SearchEntry[];
+};
+
+const QUICK_LINKS: SearchEntry[] = [
+  {
+    key: "quick-quest-rat-tutorial",
+    section: "quests",
+    targetId: "rat-tutorial",
+    kind: "Квест",
+    title: "Крысиные хвосты",
+    subtitle: "Первый заработок в Ноэре",
+    haystack: "",
+  },
+  {
+    key: "quick-map",
+    section: "map",
+    kind: "Карта",
+    title: "Интерактивная карта",
+    subtitle: "45 локаций и координаты",
+    haystack: "",
+  },
+  {
+    key: "quick-mech-controls",
+    section: "mechanics",
+    targetId: "controls",
+    kind: "Механика",
+    title: "Управление и интерфейс",
+    subtitle: "Клавиши, прицеливание, инвентарь",
+    haystack: "",
+  },
+  {
+    key: "quick-burning-keg",
+    section: "locations",
+    targetId: "burning-keg",
+    kind: "Локация",
+    title: "«Горящая бочка»",
+    subtitle: "Главная таверна Ноэра",
+    haystack: "",
+  },
+  {
+    key: "quick-cocona",
+    section: "characters",
+    targetId: "cocona",
+    kind: "Персонаж",
+    title: "Коко-на",
+    subtitle: "Компаньон и линия квестов",
+    haystack: "",
+  },
+  {
+    key: "quick-tools",
+    section: "tools",
+    kind: "Инструмент",
+    title: "Калькулятор крафта",
+    subtitle: "Что можно сварить из лута",
+    haystack: "",
+  },
+  {
+    key: "quick-tracker",
+    section: "tracker",
+    kind: "Прогресс",
+    title: "Трекер прохождения",
+    subtitle: "Квесты, достижения, секреты",
+    haystack: "",
+  },
+];
+
 export function SearchPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
+  const [searchModule, setSearchModule] = useState<SearchModule | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (!open || searchModule) return;
+    let cancelled = false;
+    import("../lib/search").then((module) => {
+      if (!cancelled) setSearchModule({ searchAll: module.searchAll, searchIndex: module.searchIndex });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, searchModule]);
+
   const results = useMemo<SearchEntry[]>(() => {
-    if (!query.trim()) {
-      return searchIndex.filter((e) =>
-        ["quest-rat-tutorial", "mech-controls", "build-hq-bruiser", "loc-burning-keg", "char-cocona", "ending-normal-doom", "equipment-saber", "secret-twin-peaks-mirage"].includes(
-          e.key,
-        ),
-      );
-    }
-    return searchAll(query);
-  }, [query]);
+    if (!query.trim()) return QUICK_LINKS;
+    if (!searchModule) return [];
+    return searchModule.searchAll(query);
+  }, [query, searchModule]);
 
   useEffect(() => {
     if (open) {
@@ -356,7 +431,9 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
         </div>
 
         <div className="max-h-[58vh] overflow-y-auto">
-          {results.length === 0 ? (
+          {query.trim() && !searchModule ? (
+            <div className="px-5 py-12 text-center text-sm text-muted">Загружаю поисковый индекс…</div>
+          ) : results.length === 0 ? (
             <div className="px-5 py-12 text-center text-sm text-muted">
               Ничего не найдено. Попробуйте «Коко-на», «катана», «Doom» или «беременность».
             </div>
@@ -407,7 +484,7 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
 
         <div className="flex items-center justify-between border-t border-line/80 px-5 py-2.5 text-[10px] text-muted/40">
           <span>↑ ↓ — выбор · Enter — открыть · Esc — закрыть</span>
-          <span>{searchIndex.length} записей</span>
+          <span>{searchModule ? `${searchModule.searchIndex.length} записей` : "индекс по запросу"}</span>
         </div>
       </div>
     </div>

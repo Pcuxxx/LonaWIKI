@@ -1,11 +1,15 @@
 import {
   BookOpen,
+  Calculator,
   Compass,
   FlaskConical,
   Footprints,
   Heart,
   Home,
+  ListChecks,
+  Map,
   MapPin,
+  Puzzle,
   ScrollText,
   Shield,
   Skull,
@@ -15,18 +19,6 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { quests } from "../data/quests";
-import { equipment } from "../data/equipment";
-import { consumables, questItems } from "../data/items";
-import { characters } from "../data/characters";
-import { enemies } from "../data/bestiary";
-import { locations } from "../data/locations";
-import { achievements } from "../data/achievements";
-import { traits } from "../data/traits";
-import { builds } from "../data/builds";
-import { endings } from "../data/endings";
-import { mechanics } from "../data/mechanics";
-import { cutContent, easterEggs, paintings, secrets } from "../data/secrets";
 import type { SectionId } from "./router";
 
 export const SITE = {
@@ -54,18 +46,18 @@ export interface NavGroup {
 }
 
 export const counts = {
-  quests: quests.length,
-  mechanics: mechanics.length,
-  builds: builds.length,
-  traits: traits.length,
-  equipment: equipment.length,
-  items: consumables.length + questItems.length,
-  locations: locations.length,
-  characters: characters.length,
-  bestiary: enemies.length,
-  endings: endings.length,
-  achievements: achievements.length,
-  secrets: secrets.length + cutContent.length + paintings.length + easterEggs.length,
+  quests: 53,
+  mechanics: 17,
+  builds: 10,
+  traits: 26,
+  equipment: 90,
+  items: 130,
+  locations: 45,
+  characters: 18,
+  bestiary: 49,
+  endings: 7,
+  achievements: 74,
+  secrets: 51,
 };
 
 export const navGroups: NavGroup[] = [
@@ -80,7 +72,8 @@ export const navGroups: NavGroup[] = [
     label: "Прохождение",
     items: [
       { id: "quests", label: "Квесты", desc: "Сюжет и побочные", icon: ScrollText, count: counts.quests },
-      { id: "locations", label: "Локации", desc: "Карта острова", icon: MapPin, count: counts.locations },
+      { id: "map", label: "Карта", desc: "Интерактивный остров", icon: Map, count: counts.locations },
+      { id: "locations", label: "Локации", desc: "Список и координаты", icon: MapPin, count: counts.locations },
       { id: "endings", label: "Концовки", desc: "Все финалы", icon: Sparkles, count: counts.endings },
       { id: "secrets", label: "Секреты", desc: "Тайны и вырезанное", icon: Compass, count: counts.secrets },
     ],
@@ -100,6 +93,14 @@ export const navGroups: NavGroup[] = [
       { id: "characters", label: "Персонажи", desc: "NPC и компаньоны", icon: Users, count: counts.characters },
       { id: "bestiary", label: "Бестиарий", desc: "Враги и боссы", icon: Skull, count: counts.bestiary },
       { id: "mechanics", label: "Механики", desc: "Системы игры", icon: BookOpen, count: counts.mechanics },
+    ],
+  },
+  {
+    label: "Инструменты",
+    items: [
+      { id: "tracker", label: "Прогресс", desc: "Личный трекер", icon: ListChecks },
+      { id: "tools", label: "Инструменты", desc: "Крафт и сравнение", icon: Calculator },
+      { id: "mods", label: "Моды", desc: "UMM и вики-мод", icon: Puzzle },
     ],
   },
   {

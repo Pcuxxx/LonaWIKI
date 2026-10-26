@@ -1,0 +1,10 @@
+{
+  "id": "lonawiki_beacon",
+  "version": "1.0.0",
+  "name": "LonaWiki Beacon",
+  "description": "Press F9 on the map to open the Russian LonaRPG wiki in your browser. No game data is changed.",
+  "entry": "001_lonawiki_beacon.rb",
+  "requires": {},
+  "before": [],
+  "thumbnail": ""
+}

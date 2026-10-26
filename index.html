@@ -10,19 +10,64 @@
     />
     <meta name="theme-color" content="#07060a" />
     <meta name="color-scheme" content="dark" />
+    <meta name="rating" content="adult" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="author" content="LonaRPG: Архив Ноэра" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://lonarpg.miraheze.org" />
+
+    <link rel="icon" href="%BASE_URL%icons/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="LonaRPG: Архив Ноэра" />
+    <meta property="og:site_name" content="LonaRPG: Архив Ноэра" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content="LonaRPG: Архив Ноэра — русский путеводитель" />
     <meta
       property="og:description"
-      content="Полный русский архив острова Ноэр: прохождение, билды, предметы, секреты и финалы."
+      content="Полный русский архив острова Ноэр: интерактивная карта, прохождение, билды, предметы, секреты и финалы."
     />
-    <meta name="rating" content="adult" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%2308070a'/%3E%3Cpath d='M20 4 36 20 20 36 4 20Z' fill='none' stroke='%23c87941' stroke-width='1.4'/%3E%3Cpath d='M20 12v13M15 17l5-5 5 5' fill='none' stroke='%23e9dfcb' stroke-width='1.6'/%3E%3C/svg%3E" />
+    <meta property="og:image" content="%BASE_URL%og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="LonaRPG: Архив Ноэра — контур острова Ноэр и знак архива" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LonaRPG: Архив Ноэра" />
+    <meta
+      name="twitter:description"
+      content="Русский путеводитель по острову Ноэр: карта, квесты, билды, секреты и концовки."
+    />
+    <meta name="twitter:image" content="%BASE_URL%og.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "LonaRPG: Архив Ноэра",
+        "alternateName": "Архив Ноэра",
+        "inLanguage": "ru",
+        "url": "https://pcuxxx.github.io/LonaWIKI/",
+        "description": "Русский путеводитель по LonaRPG: карта острова Ноэр, квесты, билды, снаряжение, секреты и концовки.",
+        "isAccessibleForFree": true
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 24px; font-family: Georgia, serif; color: #ece4d4; background: #07060a">
+        <h1>LonaRPG: Архив Ноэра</h1>
+        <p>
+          Для интерактивной карты, трекера и поиска нужен JavaScript. Основные разделы доступны и без него:
+          <a href="%BASE_URL%map" style="color: #d8b56b">карта</a>,
+          <a href="%BASE_URL%quests" style="color: #d8b56b">квесты</a>,
+          <a href="%BASE_URL%items" style="color: #d8b56b">предметы</a>.
+        </p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

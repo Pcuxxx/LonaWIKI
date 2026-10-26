@@ -30,8 +30,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Build
         run: npm run build
+        env:
+          # Аналитика включается только при наличии кода GoatCounter.
+          VITE_GOATCOUNTER: ${{ vars.VITE_GOATCOUNTER }}
+
+      - name: Check build output
+        run: |
+          test -f dist/404.html
+          test -f dist/sitemap.xml
+          test -f dist/map/index.html
+          test -f dist/sw.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
