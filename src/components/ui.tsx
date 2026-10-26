@@ -77,13 +77,13 @@ export function SectionSubhead({
 }) {
   return (
     <div className={className}>
-      <div className="flex items-end justify-between gap-4">
-        <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
+        <div className="flex min-w-0 items-center gap-2.5">
           <span className="h-1.5 w-1.5 shrink-0 rotate-45 border border-ember/70 bg-ember/25" />
           <h2 className="font-display text-[1.6rem] leading-none text-parchment">{title}</h2>
         </div>
         {aside && (
-          <span className="shrink-0 pb-0.5 text-[9.5px] uppercase tracking-[0.2em] text-muted/45">
+          <span className="ml-auto min-w-0 shrink pb-0.5 text-right text-[9.5px] uppercase tracking-[0.2em] text-muted/45 [overflow-wrap:anywhere]">
             {aside}
           </span>
         )}

@@ -52,7 +52,7 @@ function CopyButton({ text, label = "копировать" }: { text: string; la
 
 function CodeBlock({ title, code, lang }: { title?: string; code: string; lang?: string }) {
   return (
-    <div className="my-3 overflow-hidden border border-line/80 bg-[#08070b]">
+    <div className="my-3 min-w-0 overflow-hidden border border-line/80 bg-[#08070b]">
       <div className="flex items-center justify-between gap-3 border-b border-line/60 bg-white/[0.015] px-3 py-1.5">
         <span className="flex min-w-0 items-center gap-2 text-[8.5px] uppercase tracking-[0.18em] text-muted/45">
           <Terminal className="h-3 w-3 text-ember/60" />
@@ -324,7 +324,7 @@ export function ModsView() {
               <div className="mb-2 flex items-center gap-2 text-[8.5px] uppercase tracking-[0.2em] text-muted/45">
                 <FolderTree className="h-3 w-3 text-ember/60" /> структура
               </div>
-              <pre className="overflow-x-auto text-[10px] leading-[1.7] text-muted/65">
+              <pre className="min-w-0 overflow-x-auto text-[10px] leading-[1.7] text-muted/65">
                 <code>{TREE}</code>
               </pre>
             </div>
@@ -360,7 +360,7 @@ export function ModsView() {
         <SectionSubhead title="Как устроен загрузчик" aside="ModScripts · GameMods.ini" />
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <div className="border border-line/80 bg-white/[0.012] p-4">
+          <div className="min-w-0 border border-line/80 bg-white/[0.012] p-4">
             <h3 className="flex items-center gap-2 font-display text-[1.2rem] text-parchment">
               <Layers className="h-4 w-4 text-gold/70" /> Два формата модов
             </h3>
@@ -387,7 +387,7 @@ export function ModsView() {
             </div>
           </div>
 
-          <div className="border border-line/80 bg-white/[0.012] p-4">
+          <div className="min-w-0 border border-line/80 bg-white/[0.012] p-4">
             <h3 className="flex items-center gap-2 font-display text-[1.2rem] text-parchment">
               <Wrench className="h-4 w-4 text-gold/70" /> Схема _ModInfo.json
             </h3>
@@ -429,7 +429,7 @@ export function ModsView() {
         <SectionSubhead title="Свой мод за пять минут" aside="RGSS3 · Ruby" />
 
         <div className="space-y-3">
-          <div className="border border-line/80 bg-white/[0.012] p-4">
+          <div className="min-w-0 border border-line/80 bg-white/[0.012] p-4">
             <p className="text-[12px] leading-relaxed text-muted/70">
               LonaRPG работает на RPG Maker VX Ace (RGSS3). Мод — это Ruby-скрипт, который загружается после основной
               игры и может переопределять классы и методы. Главное правило: не переписывать метод целиком, а оборачивать
@@ -437,11 +437,11 @@ export function ModsView() {
               вероятностью конфликтуют.
             </p>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <div>
+              <div className="min-w-0">
                 <div className="mb-1 text-[8.5px] uppercase tracking-[0.18em] text-ember/75">Хук сцены</div>
                 <CodeBlock title="001_my_mod.rb" code={HOOK_RUBY} lang="ruby" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="mb-1 text-[8.5px] uppercase tracking-[0.18em] text-ember/75">Ввод</div>
                 <CodeBlock title="Input" code={INPUT_RUBY} lang="ruby" />
               </div>
