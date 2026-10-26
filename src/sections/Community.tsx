@@ -20,6 +20,7 @@ import { absoluteUrl, PAGE_BY_ID, PAGES } from "../lib/pages";
 import type { SectionId } from "../lib/router";
 import { trackEvent } from "../lib/analytics";
 import { openGitHubPopup } from "../lib/popup";
+import { NATIVE_COMMENTS } from "../lib/supabase";
 
 const GITHUB = "https://github.com/Pcuxxx/LonaWIKI";
 const DISCUSSIONS = `${GITHUB}/discussions`;
@@ -295,7 +296,11 @@ export function CommunityView() {
         </div>
 
         <div className="card p-4">
-          <SectionSubhead title="Комментарии" aside="Публично · 18+" className="mb-3" />
+          <SectionSubhead
+            title="Комментарии"
+            aside={NATIVE_COMMENTS ? "Без регистрации · 18+" : "Публично · 18+"}
+            className="mb-3"
+          />
           <PageComments pageId="community" pageTitle="Сообщество" />
         </div>
       </section>

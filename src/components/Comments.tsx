@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { trackEvent } from "../lib/analytics";
 import { openGitHubPopup } from "../lib/popup";
+import { NATIVE_COMMENTS } from "../lib/supabase";
+import { SupabaseComments } from "./SupabaseComments";
 
 /**
  * Комментарии раздела.
@@ -267,7 +269,14 @@ function GiscusThread({ pageId }: { pageId: string }) {
   );
 }
 
-export function PageComments({
+export function PageComments(props: { pageId: string; pageTitle: string }) {
+  // Supabase — основной режим: анонимные комментарии прямо на странице.
+  // Без ключей остаются Giscus (если установлен) и GitHub Issues.
+  if (NATIVE_COMMENTS) return <SupabaseComments pageId={props.pageId} />;
+  return <GitHubComments pageId={props.pageId} pageTitle={props.pageTitle} />;
+}
+
+function GitHubComments({
   pageId,
   pageTitle,
 }: {

@@ -38,6 +38,9 @@ jobs:
         env:
           # Аналитика включается только при наличии кода GoatCounter.
           VITE_GOATCOUNTER: ${{ vars.VITE_GOATCOUNTER }}
+          # Анонимные комментарии. Без этих переменных работает резервный режим.
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.VITE_SUPABASE_ANON_KEY }}
 
       - name: Check build output
         run: |
