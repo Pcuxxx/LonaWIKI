@@ -243,7 +243,13 @@ const files = {
       characters: datasets.characters.length,
       recipes: datasets.recipes.length,
     },
-    pages: PAGES.map((page) => ({ id: page.id, path: page.path, title: page.title, url: absolute(page) })),
+    pages: PAGES.map((page) => ({
+      id: page.id,
+      path: page.path,
+      title: page.title,
+      url: absolute(page),
+      noindex: Boolean(page.noindex),
+    })),
   },
 };
 

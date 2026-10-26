@@ -46,6 +46,7 @@ const VIEWS: Record<SectionId, SectionComponent> = {
   tools: lazy(() => import("./sections/Tools").then((m) => ({ default: m.ToolsView }))),
   mods: lazy(() => import("./sections/Mods").then((m) => ({ default: m.ModsView }))),
   community: lazy(() => import("./sections/Community").then((m) => ({ default: m.CommunityView }))),
+  stats: lazy(() => import("./sections/Stats").then((m) => ({ default: m.StatsView }))),
 };
 
 function scrollToFocus(id?: string) {

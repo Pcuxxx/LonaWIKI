@@ -152,6 +152,7 @@ for (const file of ["index.html", "404.html", "sitemap.xml", "robots.txt", "sw.j
 if (await exists(path.join(DIST, "sitemap.xml"))) {
   const sitemap = await readFile(path.join(DIST, "sitemap.xml"), "utf8");
   for (const page of progress?.pages ?? []) {
+    if (page.noindex) continue;
     if (!sitemap.includes(`/${page.path}`)) {
       warnings.push(`sitemap: нет ссылки на "${page.id}" (${page.path || "/"})`);
     }

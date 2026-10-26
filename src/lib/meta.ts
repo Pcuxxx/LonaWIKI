@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   BookOpen,
   Calculator,
   Compass,
@@ -109,6 +110,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { id: "achievements", label: "Достижения", desc: "Все достижения", icon: Trophy, count: counts.achievements },
       { id: "community", label: "Сообщество", desc: "Правки и обсуждения", icon: MessagesSquare },
+      { id: "stats", label: "Статистика", desc: "События браузера", icon: BarChart3 },
       { id: "sources", label: "Источники", desc: "Версии и ссылки", icon: BookOpen },
     ],
   },

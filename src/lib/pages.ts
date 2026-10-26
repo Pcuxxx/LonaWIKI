@@ -179,6 +179,15 @@ export const PAGES: PageMeta[] = [
     description:
       "Как предложить правку в русский архив LonaRPG, обсудить игру, скачать открытые JSON-выгрузки и помочь с проверкой данных.",
   },
+  {
+    id: "stats",
+    path: "stats",
+    label: "Статистика",
+    title: "Статистика архива — LonaRPG: Архив Ноэра",
+    description:
+      "Приватная статистика этого браузера: просмотры разделов, поиск, карта и инструменты. Без cookie, регистрации и отправки данных на сервер.",
+    noindex: true,
+  },
 ];
 
 export const PAGE_BY_ID = Object.fromEntries(PAGES.map((p) => [p.id, p])) as Record<SectionId, PageMeta>;

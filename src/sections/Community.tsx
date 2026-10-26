@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  AlertTriangle,
   ArrowUpRight,
   BookOpen,
   Check,
@@ -9,15 +8,14 @@ import {
   ExternalLink,
   FileJson,
   Github,
-  MessageSquare,
   MessagesSquare,
   PencilLine,
   Send,
   ShieldCheck,
   Sparkles,
-  Users,
 } from "lucide-react";
 import { Badge, SectionHeader, SectionSubhead } from "../components/ui";
+import { PageComments } from "../components/GitHubComments";
 import { absoluteUrl, PAGE_BY_ID, PAGES } from "../lib/pages";
 import { SITE } from "../lib/meta";
 import type { SectionId } from "../lib/router";
@@ -279,8 +277,12 @@ export function CommunityView() {
         </div>
 
         <div className="card p-4">
-          <SectionSubhead title="Комментарии" aside="Giscus" className="mb-3" />
-          <GiscusComments />
+          <SectionSubhead title="Комментарии" aside="GitHub Issues" className="mb-3" />
+          <PageComments
+            pageId="community"
+            pageTitle="Сообщество"
+            pageUrl={absoluteUrl("community")}
+          />
         </div>
       </section>
 
@@ -297,99 +299,6 @@ export function CommunityView() {
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Giscus                                                             */
-/* ------------------------------------------------------------------ */
-
-function GiscusComments() {
-  const ref = useRef<HTMLDivElement>(null);
-  const repo = import.meta.env.VITE_GISCUS_REPO;
-  const repoId = import.meta.env.VITE_GISCUS_REPO_ID;
-  const category = import.meta.env.VITE_GISCUS_CATEGORY;
-  const categoryId = import.meta.env.VITE_GISCUS_CATEGORY_ID;
-  const ready = Boolean(repo && repoId && categoryId);
-
-  useEffect(() => {
-    if (!ready || !ref.current) return;
-    const host = ref.current;
-    host.innerHTML = "";
-    const script = document.createElement("script");
-    script.src = "https://giscus.app/client.js";
-    script.async = true;
-    script.crossOrigin = "anonymous";
-    script.dataset.repo = repo;
-    script.dataset.repoId = repoId;
-    if (category) script.dataset.category = category;
-    script.dataset.categoryId = categoryId;
-    script.dataset.mapping = "pathname";
-    script.dataset.strict = "0";
-    script.dataset.reactionsEnabled = "1";
-    script.dataset.emitMetadata = "0";
-    script.dataset.inputPosition = "top";
-    script.dataset.theme = "dark_dimmed";
-    script.dataset.lang = "ru";
-    host.appendChild(script);
-    return () => {
-      host.innerHTML = "";
-    };
-  }, [ready, repo, repoId, category, categoryId]);
-
-  if (!ready) {
-    return (
-      <div className="border border-dashed border-line/70 bg-void/25 p-4">
-        <div className="flex items-center gap-2 text-[12px] text-parchment/85">
-          <MessageSquare className="h-4 w-4 text-gold/60" />
-          Комментарии ещё не подключены
-        </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-muted/60">
-          Для Giscus нужны публичный репозиторий, включённые Discussions и два идентификатора:
-          репозитория и категории. Пока их нет, обсуждайте архив в GitHub Discussions — ссылка выше.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <a
-            href={DISCUSSIONS}
-            target="_blank"
-            rel="noreferrer noopener"
-            onClick={() => trackEvent("community-discussions-fallback")}
-            className="flex items-center gap-1.5 border border-gold/35 px-3 py-1.5 text-[10.5px] text-gold transition hover:bg-gold/[0.08]"
-          >
-            <Users className="h-3.5 w-3.5" />
-            Открыть обсуждения
-          </a>
-          <a
-            href="https://giscus.app/ru"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex items-center gap-1.5 border border-line px-3 py-1.5 text-[10.5px] text-muted/65 transition hover:border-gold/30 hover:text-parchment"
-          >
-            <Code2 className="h-3.5 w-3.5" />
-            Как подключить Giscus
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div ref={ref} className="min-h-[120px]" />
-      <noscript>
-        <div className="border border-line/70 p-3 text-[11px] text-muted/60">
-          Для комментариев нужен JavaScript. Обсуждение также доступно в{" "}
-          <a className="text-gold underline" href={DISCUSSIONS}>
-            GitHub Discussions
-          </a>
-          .
-        </div>
-      </noscript>
-      <div className="mt-2 flex items-center gap-1.5 text-[9px] text-muted/35">
-        <AlertTriangle className="h-3 w-3" />
-        Комментарии — внешний сервис Giscus на GitHub. Правила те же, что в обсуждениях.
-      </div>
     </div>
   );
 }
