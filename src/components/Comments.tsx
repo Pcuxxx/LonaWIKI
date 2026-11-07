@@ -465,7 +465,7 @@ function GitHubComments({
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2 text-[10px] text-muted/45">
           <MessageSquare className="h-3.5 w-3.5 text-gold/60" />
-          {giscus === "ready" ? "Обсуждение раздела" : "Комментарии раздела"}
+          Комментарии раздела
           {giscus !== "ready" && status === "ready" && (
             <span className="border border-line/60 px-1.5 py-0.5 text-[9px] tabular-nums">
               {items.length} · ответов {totalReplies}

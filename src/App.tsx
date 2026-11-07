@@ -3,6 +3,7 @@ import { Layout, SearchPalette } from "./components/Layout";
 import { knownSections, parseLocation, useRoute, type SectionId } from "./lib/router";
 import { usePageMeta } from "./lib/seo";
 import { trackPage } from "./lib/analytics";
+import { PAGE_BY_ID } from "./lib/pages";
 
 const FOCUS_PREFIXES = [
   "eq-",
@@ -24,6 +25,8 @@ const FOCUS_PREFIXES = [
 ];
 
 type SectionComponent = LazyExoticComponent<ComponentType<{ focusId?: string }>>;
+
+const PageDiscussion = lazy(() => import("./components/PageDiscussion").then((m) => ({ default: m.PageDiscussion })));
 
 const VIEWS: Record<SectionId, SectionComponent> = {
   home: lazy(() => import("./sections/Home").then((m) => ({ default: m.Home }))),
@@ -147,12 +150,20 @@ export default function App() {
   }, []);
 
   const View = VIEWS[route.section] ?? VIEWS.home;
+  const pageMeta = PAGE_BY_ID[route.section] ?? PAGE_BY_ID.home;
+  // На «Сообществе» comments уже развёрнуты, «Статистика» — служебная страница.
+  const showDiscussion = route.section !== "community" && route.section !== "stats";
 
   return (
     <Layout route={route} onSearch={() => setSearchOpen(true)}>
       <Suspense fallback={<SectionFallback />}>
         <View focusId={route.id} />
       </Suspense>
+      {showDiscussion && (
+        <Suspense fallback={null}>
+          <PageDiscussion pageId={route.section} pageTitle={pageMeta.label} />
+        </Suspense>
+      )}
       <SearchPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </Layout>
   );

@@ -59,6 +59,7 @@ const EVENT_LABELS: Record<string, string> = {
   "comments-post": "Комментарии: новый комментарий",
   "comments-reply": "Комментарии: ответ",
   "comments-delete": "Комментарии: удаление",
+  "discussion-open": "Обсуждение раздела: открытие",
   "stats-export": "Статистика: экспорт",
   "stats-clear": "Статистика: очистка",
   "stats-toggle": "Статистика: переключатель",
