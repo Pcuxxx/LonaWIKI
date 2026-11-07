@@ -14,7 +14,7 @@ import {
 import type { ReactNode } from "react";
 import { counts, SITE } from "../lib/meta";
 import { href } from "../lib/router";
-import { Badge, Callout, SectionSubhead, Sigil, SigilWatermark } from "../components/ui";
+import { Badge, Callout, SectionSubhead, SigilWatermark } from "../components/ui";
 
 const stats = [
   { label: "Квестов", value: counts.quests, icon: ScrollText, href: href("quests") },
@@ -102,96 +102,172 @@ const inside = [
   },
 ];
 
-function SectionHead({
-  title,
-  aside,
-}: {
-  title: string;
-  aside?: ReactNode;
-}) {
+function SectionHead({ title, aside }: { title: string; aside?: ReactNode }) {
   return <SectionSubhead title={title} aside={aside} className="mb-5" />;
+}
+
+/** Скалистый силуэт острова у нижней кромки героя. */
+function IslandRidge() {
+  return (
+    <svg
+      viewBox="0 0 1200 160"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-void sm:h-28"
+    >
+      <path
+        d="M0 160V84l118-30 92 40 108-52 112 44 96-34 120 46 118-50 120 44 100-32 106 40 120-38v78Z"
+        fill="rgba(7,6,10,0.9)"
+      />
+      <path
+        d="M0 160V116l140-24 120 34 120-38 118 32 122-30 118 36 120-34 142 30 120-22v80Z"
+        fill="#07060a"
+      />
+      <path
+        d="M0 84l118-30 92 40 108-52 112 44 96-34 120 46 118-50 120 44 100-32 106 40 120-38"
+        fill="none"
+        stroke="rgba(216,181,107,0.22)"
+        strokeWidth="1"
+      />
+    </svg>
+  );
+}
+
+/** Декоративная роза ветров для правой колонки героя. */
+function CompassRose() {
+  return (
+    <svg viewBox="0 0 200 200" aria-hidden="true" className="h-64 w-64 text-gold">
+      <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" strokeOpacity=".22" />
+      <circle cx="100" cy="100" r="72" fill="none" stroke="currentColor" strokeOpacity=".12" />
+      <circle cx="100" cy="100" r="52" fill="none" stroke="currentColor" strokeOpacity=".1" />
+      <path d="M100 12v176M12 100h176" stroke="currentColor" strokeOpacity=".18" />
+      <path d="M38 38l124 124M162 38L38 162" stroke="currentColor" strokeOpacity=".08" />
+      <path d="M100 24 110 100 100 176 90 100Z" fill="currentColor" fillOpacity=".14" />
+      <path d="M24 100 100 90 176 100 100 110Z" fill="currentColor" fillOpacity=".14" />
+      <path d="M100 24 100 176M24 100 176 100" stroke="currentColor" strokeOpacity=".3" />
+      <circle cx="100" cy="100" r="4.5" fill="currentColor" fillOpacity=".6" />
+      <path d="M100 12l4 8-4 8-4-8Z" fill="currentColor" fillOpacity=".5" />
+    </svg>
+  );
 }
 
 export function Home() {
   return (
     <div>
-      <section className="relative overflow-hidden border border-gold/15 bg-gradient-to-br from-panel via-abyss to-void">
+      <section className="card-hero relative overflow-hidden">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-ember/25 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 hero-ember bg-[radial-gradient(ellipse_60%_55%_at_86%_-8%,rgba(200,121,65,0.22),transparent_62%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_52%_at_-5%_112%,rgba(132,174,189,0.08),transparent_60%)]" />
 
-        <div className="pointer-events-none absolute -right-24 -top-24 hidden h-[26rem] w-[26rem] text-gold opacity-[0.05] sm:block">
+        <div className="pointer-events-none absolute -right-24 -top-24 hidden h-[28rem] w-[28rem] text-gold opacity-[0.05] sm:block">
           <SigilWatermark />
         </div>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_65%_60%_at_88%_-10%,rgba(200,121,65,0.15),transparent_65%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_0%_110%,rgba(132,174,189,0.05),transparent_60%)]" />
 
         <span className="ornament-corner left-3 top-3 border-l border-t" />
         <span className="ornament-corner right-3 top-3 border-r border-t" />
         <span className="ornament-corner bottom-3 left-3 border-b border-l" />
         <span className="ornament-corner bottom-3 right-3 border-b border-r" />
 
-        <div className="relative px-5 py-10 sm:px-10 sm:py-14 lg:px-12 lg:py-16">
-          <div className="mb-6 flex flex-wrap items-center gap-2">
-            <Badge tone="blood">18+</Badge>
-            <Badge tone="gold">Сборка {SITE.version}</Badge>
-            <Badge tone="neutral">Русский архив</Badge>
+        <IslandRidge />
+
+        <div className="relative z-10 grid gap-8 px-5 py-11 sm:px-10 sm:py-14 lg:grid-cols-[1.65fr_0.85fr] lg:items-center lg:px-12 lg:py-16">
+          <div className="min-w-0">
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              <Badge tone="blood">18+</Badge>
+              <Badge tone="gold">Сборка {SITE.version}</Badge>
+              <Badge tone="neutral">Русский архив</Badge>
+            </div>
+
+            <p className="mb-3 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.32em] text-ember/90">
+              <span className="h-px w-7 bg-gradient-to-r from-ember/70 to-transparent" />
+              Ноэр · остров, который не отпускает
+            </p>
+
+            <h1 className="max-w-3xl font-display text-[2.9rem] leading-[0.98] sm:text-[3.7rem] lg:text-[4.35rem]">
+              <span className="title-glow block">LonaRPG:</span>
+              <span className="title-glow block">полный путеводитель</span>
+            </h1>
+
+            <p className="mt-5 max-w-2xl text-[15px] leading-[1.78] text-muted/95 sm:text-[16px]">
+              От первого крысиного хвоста до корабля капитана Эдварда. Квесты, билды, снаряжение,
+              персонажи, монстры, механики и все финалы — в одном архиве, собранном по вики
+              сообщества и проверенным данным.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-2.5">
+              <a
+                href={href("beginners")}
+                className="group inline-flex items-center gap-2 border border-ember/55 bg-gradient-to-b from-ember/25 to-ember/[0.08] px-5 py-2.5 text-sm text-[#edb489] shadow-[inset_0_1px_0_rgba(255,255,255,0.07),0_10px_30px_-18px_rgba(200,121,65,0.8)] transition hover:border-gold/60 hover:from-gold/25 hover:to-gold/[0.08] hover:text-gold"
+              >
+                Начать прохождение
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </a>
+              <a
+                href={href("quests")}
+                className="group inline-flex items-center gap-2 border border-line/90 bg-white/[0.02] px-5 py-2.5 text-sm text-parchment transition hover:border-gold/40 hover:bg-white/[0.04]"
+              >
+                Все квесты
+                <ScrollText className="h-4 w-4 text-muted/70 transition group-hover:text-gold/80" />
+              </a>
+              <a
+                href={href("map")}
+                className="group inline-flex items-center gap-2 border border-line/90 bg-white/[0.02] px-5 py-2.5 text-sm text-parchment transition hover:border-frost/40 hover:bg-white/[0.04]"
+              >
+                Карта острова
+                <MapPin className="h-4 w-4 text-muted/70 transition group-hover:text-frost/80" />
+              </a>
+            </div>
+
+            <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] uppercase tracking-[0.16em] text-muted/45">
+              <span>LonaRPG by Eccma417</span>
+              <span className="h-1 w-1 rotate-45 bg-ember/40" />
+              <span>Актуально: {SITE.version}</span>
+              <span className="h-1 w-1 rotate-45 bg-ember/40" />
+              <span>DEV {SITE.devDate}</span>
+            </div>
           </div>
 
-          <p className="mb-3 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.3em] text-ember/90">
-            <span className="h-px w-7 bg-gradient-to-r from-ember/70 to-transparent" />
-            Ноэр · остров, который не отпускает
-          </p>
-
-          <h1 className="max-w-3xl font-display text-[2.9rem] leading-[0.98] sm:text-[3.7rem] lg:text-[4.35rem]">
-            <span className="title-glow block">LonaRPG:</span>
-            <span className="title-glow block">полный путеводитель</span>
-          </h1>
-
-          <p className="mt-5 max-w-2xl text-[15px] leading-[1.78] text-muted/95 sm:text-[16px]">
-            От первого крысиного хвоста до корабля капитана Эдварда. Квесты, билды, снаряжение,
-            персонажи, монстры, механики и все финалы — в одном архиве, собранном по вики
-            сообщества и проверенным данным.
-          </p>
-
-          <div className="mt-8 flex flex-wrap gap-2.5">
-            <a
-              href={href("beginners")}
-              className="group inline-flex items-center gap-2 border border-ember/55 bg-gradient-to-b from-ember/25 to-ember/[0.08] px-5 py-2.5 text-sm text-[#edb489] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:border-gold/60 hover:from-gold/25 hover:to-gold/[0.08] hover:text-gold"
-            >
-              Начать прохождение
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-            </a>
-            <a
-              href={href("quests")}
-              className="group inline-flex items-center gap-2 border border-line/90 bg-white/[0.02] px-5 py-2.5 text-sm text-parchment transition hover:border-gold/40 hover:bg-white/[0.04]"
-            >
-              Все квесты
-              <ScrollText className="h-4 w-4 text-muted/70 transition group-hover:text-gold/80" />
-            </a>
-          </div>
-
-          <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] uppercase tracking-[0.16em] text-muted/45">
-            <span>LonaRPG by Eccma417</span>
-            <span className="h-1 w-1 rotate-45 bg-ember/40" />
-            <span>Актуально: {SITE.version}</span>
-            <span className="h-1 w-1 rotate-45 bg-ember/40" />
-            <span>DEV {SITE.devDate}</span>
+          <div className="relative hidden justify-center lg:flex">
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-gold opacity-[0.07]">
+              <CompassRose />
+            </div>
+            <div className="relative w-full max-w-[15rem] space-y-2.5 pt-2">
+              {[
+                { k: "Сложность", v: "Hard · Hell · Doom" },
+                { k: "Финал", v: "5+ исходов" },
+                { k: "Билдов", v: "10 направлений" },
+              ].map((row) => (
+                <div
+                  key={row.k}
+                  className="flex items-baseline justify-between gap-3 border-b border-line/50 pb-2"
+                >
+                  <span className="text-[9.5px] uppercase tracking-[0.2em] text-muted/55">{row.k}</span>
+                  <span className="font-display text-[15px] text-parchment/90">{row.v}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+      <section
+        aria-label="Объём архива"
+        className="mt-4 grid grid-cols-2 overflow-hidden border border-line/50 bg-panel/25 sm:grid-cols-3 lg:grid-cols-6"
+      >
         {stats.map((s) => (
-          <a key={s.label} href={s.href} className="card card-hover group px-3.5 py-3.5">
-            <div className="mb-3 flex h-7 w-7 items-center justify-center border border-ember/20 bg-ember/[0.05] text-ember/75 transition group-hover:border-gold/35 group-hover:text-gold">
-              <s.icon className="h-3.5 w-3.5" />
+          <a
+            key={s.label}
+            href={s.href}
+            className="stat-cell group -mb-px -mr-px flex flex-col gap-2 border-b border-r border-line/50 px-4 py-4 hover:bg-white/[0.02]"
+          >
+            <div className="flex items-center justify-between">
+              <s.icon className="h-4 w-4 text-ember/70 transition group-hover:text-gold" />
+              <ArrowRight className="h-3 w-3 -translate-x-1 text-gold/0 transition group-hover:translate-x-0 group-hover:text-gold/70" />
             </div>
-            <div className="font-display text-[1.7rem] leading-none text-parchment tabular-nums">
+            <div className="font-display text-[2rem] leading-none text-parchment tabular-nums transition group-hover:text-gold">
               {s.value}
             </div>
-            <div className="mt-1.5 text-[9px] uppercase tracking-[0.16em] text-muted/55">
-              {s.label}
-            </div>
+            <div className="text-[9px] uppercase tracking-[0.16em] text-muted/55">{s.label}</div>
           </a>
         ))}
       </section>
@@ -204,10 +280,10 @@ export function Home() {
               <a
                 key={r.n}
                 href={r.to}
-                className="group relative -mx-2 flex gap-4 rounded-[2px] border border-transparent px-2 py-3 transition hover:border-line/60 hover:bg-gradient-to-r hover:from-ember/[0.045] hover:to-transparent"
+                className="group relative -mx-2 flex gap-4 rounded-[2px] border border-transparent px-2 py-3 transition hover:border-line/60 hover:bg-gradient-to-r hover:from-ember/[0.05] hover:to-transparent"
               >
                 <div className="relative flex w-8 shrink-0 justify-center pt-1">
-                  <span className="flex h-6 w-6 items-center justify-center border border-line/80 bg-void/60 font-display text-[11px] leading-none text-ember/70 transition group-hover:border-gold/35 group-hover:text-gold">
+                  <span className="flex h-6 w-6 items-center justify-center border border-line/80 bg-void/60 font-display text-[11px] leading-none text-ember/70 transition group-hover:border-gold/40 group-hover:bg-ember/[0.08] group-hover:text-gold">
                     {r.n}
                   </span>
                   {i < route.length - 1 && (
@@ -241,9 +317,9 @@ export function Home() {
             Игра содержит сцены 18+ и тяжёлые темы. В архиве они описаны как механики, без
             графических деталей. Часть контента можно отключить в настройках.
           </Callout>
-          <div className="card p-5">
-            <div className="mb-2.5 flex items-center gap-2 text-[9px] uppercase tracking-[0.22em] text-muted/50">
-              <span className="h-1 w-1 rotate-45 bg-gold/60" />
+          <div className="card card-hero p-5">
+            <div className="mb-2.5 flex items-center gap-2 text-[9px] uppercase tracking-[0.22em] text-muted/55">
+              <span className="tick-diamond" />
               Главная цель
             </div>
             <div className="font-display text-[2.4rem] leading-none text-gold">20–30 GC</div>
@@ -266,7 +342,7 @@ export function Home() {
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {inside.map((c) => (
             <a key={c.title} href={c.to} className="card card-hover group p-[18px]">
-              <div className="mb-3 flex h-8 w-8 items-center justify-center border border-ember/20 bg-ember/[0.05] text-ember/75 transition group-hover:border-gold/35 group-hover:text-gold">
+              <div className="mb-3 flex h-8 w-8 items-center justify-center border border-ember/20 bg-ember/[0.05] text-ember/75 transition group-hover:border-gold/40 group-hover:bg-gold/[0.06] group-hover:text-gold">
                 <c.icon className="h-4 w-4" />
               </div>
               <h3 className="font-display text-[1.15rem] leading-tight text-parchment transition group-hover:text-gold">

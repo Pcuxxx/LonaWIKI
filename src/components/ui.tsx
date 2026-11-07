@@ -47,11 +47,12 @@ export function SectionHeader({
 }) {
   return (
     <header className="relative mb-9 overflow-hidden border-b border-line/70 pb-7">
+      <div className="pointer-events-none absolute -left-4 -top-6 h-28 w-28 bg-[radial-gradient(circle,rgba(200,121,65,0.14),transparent_70%)]" />
       <div className="pointer-events-none absolute -right-5 -top-12 hidden h-44 w-44 text-gold opacity-[0.055] sm:block">
         <SigilWatermark />
       </div>
       <div className="mb-3 flex flex-wrap items-center gap-2.5 text-[10.5px] font-semibold uppercase tracking-[0.3em] text-ember/90">
-        <span className="h-1.5 w-1.5 rotate-45 border border-ember/70 bg-ember/25" />
+        <span className="tick-diamond" />
         {eyebrow}
         <span className="h-px w-10 bg-gradient-to-r from-ember/50 to-transparent" />
       </div>
@@ -79,7 +80,7 @@ export function SectionSubhead({
     <div className={className}>
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
         <div className="flex min-w-0 items-center gap-2.5">
-          <span className="h-1.5 w-1.5 shrink-0 rotate-45 border border-ember/70 bg-ember/25" />
+          <span className="tick-diamond" />
           <h2 className="font-display text-[1.6rem] leading-none text-parchment">{title}</h2>
         </div>
         {aside && (
@@ -88,7 +89,10 @@ export function SectionSubhead({
           </span>
         )}
       </div>
-      <div className="mt-2.5 h-px bg-gradient-to-r from-gold/25 via-line/50 to-transparent" />
+      <div className="mt-2.5 flex items-center gap-2">
+        <span className="h-px flex-1 bg-gradient-to-r from-gold/30 via-line/60 to-transparent" />
+        <span className="h-1 w-1 rotate-45 border border-gold/40 bg-gold/15" />
+      </div>
     </div>
   );
 }

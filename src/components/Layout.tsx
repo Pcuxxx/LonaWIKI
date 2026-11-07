@@ -39,7 +39,7 @@ function SidebarLink({
       onClick={onClick}
       className={`group relative flex items-center gap-3 border-l-2 px-4 py-2.5 transition ${
         active
-          ? "border-gold/80 bg-gradient-to-r from-ember/[0.16] via-ember/[0.05] to-transparent text-parchment"
+          ? "border-gold/80 bg-gradient-to-r from-ember/[0.18] via-ember/[0.06] to-transparent text-parchment shadow-[inset_0_1px_0_rgba(216,181,107,0.07)]"
           : "border-transparent text-muted/90 hover:border-line hover:bg-white/[0.025] hover:text-parchment"
       }`}
     >
@@ -106,7 +106,8 @@ export function Layout({
         К содержимому
       </a>
 
-      <header className="fixed inset-x-0 top-0 z-50 h-16 border-b border-line/70 bg-void/85 backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 h-16 border-b border-line/70 bg-void/85 shadow-[0_18px_44px_-32px_rgba(0,0,0,0.98)] backdrop-blur-xl">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-ember/20 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
         <div className="flex h-full items-center gap-3 px-3 sm:px-5">
           <button
@@ -134,6 +135,7 @@ export function Layout({
           <div className="mx-2 hidden h-7 w-px bg-gradient-to-b from-transparent via-line to-transparent md:block" />
           <div className="hidden items-center gap-2 text-[10.5px] uppercase tracking-[0.18em] text-muted/80 md:flex">
             <span className="text-gold/50">/</span>
+            <span className="h-1 w-1 rotate-45 bg-ember/45" />
             <span>{sectionLabel(route.section)}</span>
           </div>
 
@@ -228,8 +230,12 @@ export function Layout({
           {children}
         </main>
 
-        <footer className="mt-14 border-t border-line/60 bg-void/35">
-          <div className="mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-10">
+        <footer className="relative mt-14 overflow-hidden border-t border-line/60 bg-void/35">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+          <div className="pointer-events-none absolute -bottom-16 -right-10 hidden h-56 w-56 text-gold opacity-[0.035] md:block">
+            <Sigil />
+          </div>
+          <div className="relative mx-auto max-w-[1180px] px-4 py-10 sm:px-6 lg:px-10">
             <div className="flex flex-col gap-7 md:flex-row md:items-start md:justify-between">
               <div className="max-w-xl">
                 <div className="flex items-center gap-3">
