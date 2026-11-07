@@ -52,7 +52,7 @@ export function AchievementsView({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Архив"
         title="Достижения"
-        description="Все 74 достижения с русскими названиями и условиями. Пропускаемые отмечены: их можно потерять, если пройти ключевую сцену или сменить сложность."
+        description="Все 74 достижения с русскими названиями и условиями. Пропускаемые отмечены — их можно потерять, если пройти важную сцену или сменить сложность."
         meta={
           <>
             <Badge tone="gold">{achievements.length} всего</Badge>
@@ -152,12 +152,12 @@ export function AchievementsView({ focusId }: { focusId?: string }) {
         <div className="border border-gold/20 bg-gold/[0.04] p-4">
           <h2 className="mb-2 font-display text-base text-parchment">Сложность и достижения</h2>
           <p className="text-[13px] leading-relaxed text-parchment/80">
-            Ачивки за Hell и Doom засчитываются, только если режим включён с первого дня новой игры.
+            Достижения за Hell и Doom засчитываются, только если режим включён с первого дня новой игры.
             Переключение сложности посреди прохождения их аннулирует. Проверяйте это до старта.
           </p>
         </div>
         <div className="border border-blood/25 bg-blood/[0.05] p-4">
-          <h2 className="mb-2 font-display text-base text-parchment">Самые обидные промахи</h2>
+          <h2 className="mb-2 font-display text-base text-parchment">Что легко пропустить</h2>
           <ul className="space-y-1 text-[12px] leading-relaxed text-parchment/80">
             <li>• Пропустить картину в локации, которую нельзя посетить повторно.</li>
             <li>• Убить Гадалку до отплытия — меняется концовка.</li>

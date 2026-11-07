@@ -27,7 +27,7 @@ export function Mechanics({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Системы"
         title="Механики LonaRPG"
-        description="Как устроены статы, бой, стелс, выживание, взрослые системы и Rebirth. Здесь нет советов «просто играйте лучше» — только правила, числа и последствия."
+        description="Как устроены характеристики, бой, скрытность, выживание, взрослые системы и Rebirth. Только правила, числа и последствия."
         meta={
           <>
             <span className="text-[10px] uppercase tracking-[0.16em] text-muted/50">

@@ -47,7 +47,7 @@ export function SourcesView() {
       <SectionHeader
         eyebrow="Архив"
         title="Источники и версии"
-        description="Откуда взяты данные, что проверено и где возможны расхождения. Мы не выдаём вырезанное за игровое и помечаем спорные места."
+        description="Откуда взяты данные, что проверено и где возможны неточности. Вырезанный контент не выдаём за игровой, спорные места помечаем."
         meta={
           <>
             <Badge tone="gold">Сборка {SITE.version}</Badge>
@@ -58,7 +58,7 @@ export function SourcesView() {
       />
 
       <section className="mb-8">
-        <SectionSubhead title="Где взять игру" aside="без пиратских зеркал" />
+        <SectionSubhead title="Где взять игру" aside="официальные ссылки" />
         <div className="grid gap-3 lg:grid-cols-[1.35fr_1fr]">
           <div className="card p-5">
             <div className="mb-3 flex flex-wrap items-center gap-2">

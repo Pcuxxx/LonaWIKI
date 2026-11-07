@@ -34,12 +34,12 @@ export function BuildsView({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Персонаж"
         title="Билды"
-        description="10 рабочих сборок с распределением статов, чертами, снаряжением и ротацией. Цифры — ориентир для 20–30 уровня, а не догма. Каждый билд имеет честные минусы."
+        description="10 готовых сборок: распределение характеристик, черты, снаряжение и порядок боя. Цифры рассчитаны на 20–30 уровень, а не обязательны. У каждой сборки есть минусы."
         meta={
           <>
             <Badge tone="gold">{builds.length} сборок</Badge>
             <Badge tone="neutral">Hard → Doom</Badge>
-            <Badge tone="violet">С ротациями</Badge>
+            <Badge tone="violet">С порядком боя</Badge>
           </>
         }
       />
@@ -169,7 +169,7 @@ export function BuildsView({ focusId }: { focusId?: string }) {
 
             <div className="mt-5">
               <h3 className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted/55">
-                Ротация и тактика
+                Порядок боя и тактика
               </h3>
               <ol className="space-y-2">
                 {active.rotation.map((r, i) => (

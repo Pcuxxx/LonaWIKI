@@ -231,7 +231,7 @@ export function ModsView() {
       <SectionHeader
         eyebrow="Расширения"
         title="Моды LonaRPG"
-        description="Как устроен загрузчик модов, где лежат ModScripts и GameMods.ini, чем отличается старый формат от _ModInfo.json и как поставить безопасный вики-мод с горячей клавишей."
+        description="Как работает загрузчик модов, где лежат папка ModScripts и файл GameMods.ini, чем отличается старый формат от _ModInfo.json и как установить безопасный вики-мод."
         meta={
           <>
             <Badge tone="gold">UMM · ModScripts</Badge>
@@ -426,7 +426,7 @@ export function ModsView() {
 
       {/* Свой мод */}
       <section id="code" className="mt-10 scroll-mt-24">
-        <SectionSubhead title="Свой мод за пять минут" aside="RGSS3 · Ruby" />
+        <SectionSubhead title="Пример своего мода" aside="RGSS3 · Ruby" />
 
         <div className="space-y-3">
           <div className="min-w-0 border border-line/80 bg-white/[0.012] p-4">
@@ -485,7 +485,7 @@ export function ModsView() {
 
       {/* FAQ */}
       <section id="faq" className="mt-10 scroll-mt-24">
-        <SectionSubhead title="Если что-то пошло не так" aside={`${faq.length} вопросов`} />
+        <SectionSubhead title="Частые проблемы" aside={`${faq.length} вопросов`} />
         <div className="border border-line/80 bg-white/[0.012] px-4">
           {faq.map((item) => (
             <Disclosure key={item.q} title={item.q}>

@@ -53,7 +53,7 @@ export function BestiaryView({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Мир"
         title="Бестиарий"
-        description="Враги острова: от крыс до Тёмного Берсерка. HP и атаки ориентировочные — на Hell и Doom они выше, а поведение меняется. Слабости важнее цифр."
+        description="Все враги острова: от крыс до Тёмного берсерка. HP и атаки примерные — на сложностях Hell и Doom они выше, а поведение меняется. Слабости важнее цифр."
         meta={
           <>
             <Badge tone="gold">{enemies.length} записей</Badge>

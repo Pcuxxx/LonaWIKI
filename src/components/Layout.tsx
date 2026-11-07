@@ -250,8 +250,8 @@ export function Layout({
                   </div>
                 </div>
                 <p className="mt-3.5 text-xs leading-relaxed text-muted/60">
-                  Неофициальный русскоязычный архив. LonaRPG создан Eccma417. Материалы сообщества
-                  используются с указанием источников; тексты переписаны, а не скопированы.
+                  Неофициальный русский архив по игре. LonaRPG создан Eccma417. Материалы сообщества
+                  используются со ссылками на источники; тексты переписаны своими словами.
                 </p>
               </div>
               <div className="flex flex-col items-start gap-3 md:items-end">
@@ -450,7 +450,7 @@ export function SearchPalette({ open, onClose }: { open: boolean; onClose: () =>
             <div className="px-5 py-12 text-center text-sm text-muted">Загружаю поисковый индекс…</div>
           ) : results.length === 0 ? (
             <div className="px-5 py-12 text-center text-sm text-muted">
-              Ничего не найдено. Попробуйте «Коко-на», «катана», «Doom» или «беременность».
+              Ничего не найдено. Попробуйте «Коко-на», «катана» или «беременность».
             </div>
           ) : (
             <>

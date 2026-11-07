@@ -59,7 +59,7 @@ export function EquipmentView({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Персонаж"
         title="Снаряжение"
-        description="Оружие, броня, одежда и аксессуары с реальными статами. Цены указаны в TP (1 Copper Coin = 200 TP, 1 Gold Coin = 20 000 TP). Вырезанные и отладочные предметы помечены отдельно."
+        description="Оружие, броня, одежда и аксессуары с характеристиками из игры. Цены в TP (1 медная монета = 200 TP, 1 золотая монета = 20 000 TP). Вырезанные и отладочные предметы помечены отдельно."
         meta={
           <>
             <Badge tone="gold">{equipment.length} предметов</Badge>

@@ -36,28 +36,28 @@ const route = [
   {
     n: "02",
     title: "Найти работу",
-    text: "Повторяемые заказы, кладбище, шахта и побережье. Капитал важнее уровня.",
+    text: "Повторяемые заказы, кладбище, шахта и побережье. Деньги важнее уровня.",
     link: "Квесты",
     to: href("quests"),
   },
   {
     n: "03",
     title: "Собрать отряд",
-    text: "Коко-на, Рарран, Томми и Лиза меняют и бой, и финал. Их линии легко пропустить.",
+    text: "Коко-на, Рарран, Томми и Лиза меняют бой и концовку. Их сюжетные линии легко пропустить.",
     link: "Компаньоны",
     to: href("characters"),
   },
   {
     n: "04",
     title: "Накопить 20–30 GC",
-    text: "Цена билета зависит от мировой сложности. Банк, молоко и трофеи — ваши друзья.",
+    text: "Цена билета зависит от сложности мира. Банк, молоко и трофеи помогут накопить.",
     link: "Экономика",
     to: href("mechanics", "economy"),
   },
   {
     n: "05",
     title: "Уплыть — или остаться",
-    text: "Пять основных финалов, секретная ядерная концовка и Rebirth. Выбирать вам.",
+    text: "Пять основных финалов, секретная ядерная концовка и Rebirth. Выбор за вами.",
     link: "Концовки",
     to: href("endings"),
   },
@@ -78,8 +78,8 @@ const inside = [
   },
   {
     icon: Swords,
-    title: "10 билдов",
-    text: "HQ-боец, стелс-ассасин, лучник, маги, суккуб и ловчая. С ротациями и честными минусами.",
+    title: "10 сборок",
+    text: "Воин, ассасин, лучник, маг, суккуб и ловчий. С порядком боя и честными минусами.",
     to: href("builds"),
   },
   {
@@ -180,7 +180,7 @@ export function Home() {
 
             <p className="mb-3 flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.32em] text-ember/90">
               <span className="h-px w-7 bg-gradient-to-r from-ember/70 to-transparent" />
-              Ноэр · остров, который не отпускает
+              Русский путеводитель по LonaRPG
             </p>
 
             <h1 className="max-w-3xl font-display text-[2.9rem] leading-[0.98] sm:text-[3.7rem] lg:text-[4.35rem]">
@@ -189,9 +189,8 @@ export function Home() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-[15px] leading-[1.78] text-muted/95 sm:text-[16px]">
-              От первого крысиного хвоста до корабля капитана Эдварда. Квесты, билды, снаряжение,
-              персонажи, монстры, механики и все финалы — в одном архиве, собранном по вики
-              сообщества и проверенным данным.
+              Здесь собраны квесты, сборки, снаряжение, персонажи, монстры, механики и все
+              концовки игры. Данные взяты из вики сообщества и проверены.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-2.5">
@@ -219,11 +218,11 @@ export function Home() {
             </div>
 
             <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[10px] uppercase tracking-[0.16em] text-muted/45">
-              <span>LonaRPG by Eccma417</span>
+              <span>LonaRPG создан Eccma417</span>
               <span className="h-1 w-1 rotate-45 bg-ember/40" />
-              <span>Актуально: {SITE.version}</span>
+              <span>Версия: {SITE.version}</span>
               <span className="h-1 w-1 rotate-45 bg-ember/40" />
-              <span>DEV {SITE.devDate}</span>
+              <span>Обновлено: {SITE.devDate}</span>
             </div>
           </div>
 
@@ -233,9 +232,9 @@ export function Home() {
             </div>
             <div className="relative w-full max-w-[15rem] space-y-2.5 pt-2">
               {[
-                { k: "Сложность", v: "Hard · Hell · Doom" },
-                { k: "Финал", v: "5+ исходов" },
-                { k: "Билдов", v: "10 направлений" },
+                { k: "Сложности", v: "Hard, Hell, Doom" },
+                { k: "Концовок", v: "5+" },
+                { k: "Сборок", v: "10" },
               ].map((row) => (
                 <div
                   key={row.k}
@@ -274,7 +273,7 @@ export function Home() {
 
       <div className="mt-11 grid gap-9 lg:grid-cols-[1.5fr_1fr]">
         <section>
-          <SectionHead title="Маршрут к кораблю" aside="5 этапов" />
+          <SectionHead title="Основной путь" aside="5 этапов" />
           <div className="space-y-1">
             {route.map((r, i) => (
               <a
@@ -309,13 +308,13 @@ export function Home() {
 
         <aside className="space-y-4">
           <Callout tone="warn" title="Сначала — сложность">
-            Hard — для первого знакомства. Hell добавляет порчу еды и запрет выхода из боя. Doom
-            удаляет сохранение при смерти. Ачивки за Hell/Doom считаются только при включении с
-            первого дня.
+            Для первого прохождения выбирайте Hard. На Hell еда портится, а выйти из боя нельзя.
+            На Doom смерть удаляет сохранение. Достижения за Hell и Doom засчитываются, только
+            если сложность выбрана с самого начала.
           </Callout>
           <Callout tone="adult" title="Взрослый контент">
-            Игра содержит сцены 18+ и тяжёлые темы. В архиве они описаны как механики, без
-            графических деталей. Часть контента можно отключить в настройках.
+            В игре есть сцены 18+ и тяжёлые темы. В архиве они описаны как обычные механики, без
+            подробностей. Часть контента можно отключить в настройках.
           </Callout>
           <div className="card card-hero p-5">
             <div className="mb-2.5 flex items-center gap-2 text-[9px] uppercase tracking-[0.22em] text-muted/55">
@@ -324,7 +323,7 @@ export function Home() {
             </div>
             <div className="font-display text-[2.4rem] leading-none text-gold">20–30 GC</div>
             <p className="mt-2 text-[13px] leading-relaxed text-muted/90">
-              Столько стоит билет у капитана Эдварда. Цена растёт вместе с мировой сложностью.
+              Столько стоит билет у капитана Эдварда. Чем выше сложность мира, тем дороже билет.
             </p>
             <a
               href={href("endings")}
@@ -338,7 +337,7 @@ export function Home() {
       </div>
 
       <section className="mt-11">
-        <SectionHead title="Что внутри" aside="без воды" />
+        <SectionHead title="Что есть в архиве" aside="кратко" />
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {inside.map((c) => (
             <a key={c.title} href={c.to} className="card card-hover group p-[18px]">
@@ -363,7 +362,7 @@ export function Home() {
             <ShieldAlert className="h-4 w-4 text-blood/90" /> Спойлеры
           </div>
           <p className="text-[13px] leading-relaxed text-muted/90">
-            Концовки, секреты и судьбы персонажей спрятаны за кнопкой «Показать спойлер». Сюжетные
+            Концовки, секреты и судьбы персонажей спрятаны под кнопкой «Показать спойлер». Сюжетные
             квесты описаны открыто, но без финальных поворотов.
           </p>
         </div>

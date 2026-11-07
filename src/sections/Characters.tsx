@@ -36,7 +36,7 @@ export function CharactersView({ focusId }: { focusId?: string }) {
       <SectionHeader
         eyebrow="Мир"
         title="Персонажи и компаньоны"
-        description="Кто помогает Лоне, кто использует её и кого можно забрать на корабль. Условия вербовки, роли в бою и слабости — без романтизации."
+        description="Кто помогает Лоне, кто ей пользуется и кого можно забрать на корабль. Условия вербовки, роль в бою и слабости."
         meta={
           <>
             <Badge tone="violet">{companions} компаньонов</Badge>
